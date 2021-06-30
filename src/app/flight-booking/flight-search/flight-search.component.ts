@@ -8,10 +8,11 @@ import { CommonModule } from '@angular/common';
 import { FlightService } from './flight.service';
 import { CityPipe } from '../../shared/pipes/city.pipe';
 import { BehaviorSubject, Observable, Observer, share, Subject, Subscription, takeUntil } from 'rxjs';
+import { FlightCardComponent } from '../flight-card/flight-card.component';
 
 @Component({
   standalone: true,
-  imports: [CommonModule, FormsModule, CityPipe],
+  imports: [CommonModule, FormsModule, CityPipe, FlightCardComponent],
   selector: 'app-flight-search',
   templateUrl: './flight-search.component.html',
   styleUrl: './flight-search.component.css',
@@ -33,13 +34,32 @@ export class FlightSearchComponent implements OnDestroy {
 
   message = '';
 
+  basket: { [id: number]: boolean } = {
+    3: true,
+    5: true,
+  };
+
   private readonly destroyRef = inject(DestroyRef);
   private readonly flightService = inject(FlightService);
 
   constructor() {
     effect(() => console.log(this.flightsSignal(), this.flightsLength())); // similar to RxJS tap()
 
-    this.onSearch();
+    if (this.from && this.to) {
+      this.onSearch();
+    }
+  }
+
+  ngOnDestroy(): void {
+    // 4a. my unsubscribe
+    this.flightsSubscription?.unsubscribe();
+
+    // 4b. subject emit thru terminator$
+    this.onDestroySubject.next();
+    this.onDestroySubject.complete();
+
+    // complete behavior subject
+    this.flightsSubject.complete();
   }
 
   onSearch(): void {
@@ -67,18 +87,6 @@ export class FlightSearchComponent implements OnDestroy {
 
     // 3c. takeUntilDestroyed
     this.flights$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(flightsObserver);
-  }
-
-  ngOnDestroy(): void {
-    // 4a. my unsubscribe
-    this.flightsSubscription?.unsubscribe();
-
-    // 4b. subject emit thru terminator$
-    this.onDestroySubject.next();
-    this.onDestroySubject.complete();
-
-    // complete behavior subject
-    this.flightsSubject.complete();
   }
 
   onSelect(selectedFlight: Flight): void {
