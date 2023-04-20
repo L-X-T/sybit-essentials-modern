@@ -10,10 +10,18 @@ import { CityPipe } from '../../shared/pipes/city.pipe';
 import { BehaviorSubject, Observable, Observer, share, Subject, Subscription, takeUntil } from 'rxjs';
 import { FlightCardComponent } from '../flight-card/flight-card.component';
 import { FlightStatusToggleComponent } from '../flight-status-toggle/flight-status-toggle.component';
+import { FlightValidationErrorsComponent } from '../flight-validation-errors/flight-validation-errors.component';
 
 @Component({
   standalone: true,
-  imports: [CommonModule, FormsModule, CityPipe, FlightCardComponent, FlightStatusToggleComponent],
+  imports: [
+    CommonModule,
+    FormsModule,
+    CityPipe,
+    FlightCardComponent,
+    FlightStatusToggleComponent,
+    FlightValidationErrorsComponent,
+  ],
   selector: 'app-flight-search',
   templateUrl: './flight-search.component.html',
   styleUrl: './flight-search.component.css',
@@ -21,6 +29,9 @@ import { FlightStatusToggleComponent } from '../flight-status-toggle/flight-stat
 export class FlightSearchComponent implements OnDestroy {
   from = '';
   to = '';
+  minLength = 3;
+  maxLength = 15;
+
   flights: Flight[] = []; // old school
   flights$?: Observable<Flight[]>; // observable
   flightsSubject = new BehaviorSubject<Flight[]>([]); // subject
