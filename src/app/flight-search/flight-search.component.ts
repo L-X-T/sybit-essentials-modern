@@ -1,4 +1,4 @@
-import { Component, DestroyRef, inject, OnDestroy } from '@angular/core';
+import { Component, computed, DestroyRef, effect, inject, OnDestroy, signal } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
@@ -7,7 +7,7 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { FlightService } from './flight.service';
 import { CityPipe } from '../shared/pipes/city.pipe';
-import { Observable, Observer, share, Subject, Subscription, takeUntil } from 'rxjs';
+import { BehaviorSubject, Observable, Observer, share, Subject, Subscription, takeUntil } from 'rxjs';
 import { AsyncCityPipe } from '../shared/pipes/async-city.pipe';
 
 @Component({
@@ -20,8 +20,12 @@ import { AsyncCityPipe } from '../shared/pipes/async-city.pipe';
 export class FlightSearchComponent implements OnDestroy {
   from = 'Hamburg';
   to = 'Graz';
-  flights: Flight[] = [];
-  flights$?: Observable<Flight[]>;
+  flights: Flight[] = []; // old school
+  flights$?: Observable<Flight[]>; // observable
+  flightsSubject = new BehaviorSubject<Flight[]>([]); // subject
+  flightsSignal = signal<Flight[]>([]); // signal
+  flightsLength = computed(() => this.flightsSignal().length); // computed signal
+
   flightsSubscription?: Subscription;
   private readonly onDestroySubject = new Subject<void>();
   readonly terminator$ = this.onDestroySubject.asObservable();
@@ -34,6 +38,8 @@ export class FlightSearchComponent implements OnDestroy {
   private readonly flightService = inject(FlightService);
 
   constructor() {
+    effect(() => console.log(this.flightsSignal(), this.flightsLength())); // similar to RxJS tap()
+
     this.onSearch();
   }
 
@@ -43,7 +49,12 @@ export class FlightSearchComponent implements OnDestroy {
 
     // 2. my observer
     const flightsObserver: Observer<Flight[]> = {
-      next: (flights) => (this.flights = flights),
+      next: (flights) => {
+        this.flights = flights;
+        this.flightsSubject.next(flights);
+        this.flightsSignal.set(flights);
+        this.flightsSignal.update((flights) => [...flights]);
+      },
       error: (errResp: HttpErrorResponse) => console.error('Error loading flights', errResp),
       complete: () => console.debug('Flights loading completed.'),
     };
@@ -66,6 +77,9 @@ export class FlightSearchComponent implements OnDestroy {
     // 4b. subject emit thru terminator$
     this.onDestroySubject.next();
     this.onDestroySubject.complete();
+
+    // complete behavior subject
+    this.flightsSubject.complete();
   }
 
   onSelect(selectedFlight: Flight): void {
