@@ -259,22 +259,24 @@ In this exercise you will validate the _from_ field with the built-in validators
    <p>
 
    ```html
-   <input formControlName="from" class="form-control" /> [...] errors: {{ editForm.controls['from'].errors | json }}
+   <input formControlName="from" [...] /> [...] errors: {{ editForm.controls['from'].errors | json }}
    ```
 
    </p>
    </details>
 
-3. Also use the control's `hasError` method to find out whether the `minlength` error has occurred.
+3. Also use the control's `errors` object to find out whether the `minlength` error has occurred.
 
    <details>
    <summary>Show source</summary>
    <p>
 
    ```html
-   <input formControlName="from" class="form-control" />
-   [...]
-   <div *ngIf="editForm.controls['from']?.hasError('minlength')" class="text-danger">...minlength...</div>
+   <input formControlName="from" [...] />
+
+   @if (editForm.controls['from'].errors['minlength']) {
+    <div class="text-danger">...minlength...</div>
+   }
    ```
 
    </p>
@@ -315,7 +317,7 @@ this.flightService.findById(this.id).subscribe({
   error: (err: HttpErrorResponse) => {
     console.error('Error', err);
     this.message = 'Error Loading!';
-  }
+  },
 });
 ```
 

@@ -22,7 +22,7 @@ In this exercise you will first create the FlightCardComponent shown. Then you w
    ```typescript
    @Component({
      selector: 'app-flight-card',
-     templateUrl: './flight-card.component.html'
+     templateUrl: './flight-card.component.html',
    })
    export class FlightCardComponent {
      @Input({ required: true }) item!: Flight;
@@ -45,7 +45,7 @@ In this exercise you will first create the FlightCardComponent shown. Then you w
 
 3. Open the template of this component (`flight-card.component.html`). Expand this file so that the map is displayed:
 
-   ```typescript
+   ```html
    <div class="card" [style.background-color]="selected ? 'rgb(204, 197, 185)' : ''">
      <div class="header">
        <h2 class="title">{{ item.from }} - {{ item.to }}</h2>
@@ -55,12 +55,11 @@ In this exercise you will first create the FlightCardComponent shown. Then you w
        <p>Flight-No.: #{{ item.id }}</p>
        <p>Date: {{ item.date | date:'dd.MM.yyyy HH:mm' }}</p>
        <p>
-         <button *ngIf="!selected" type="button" class="btn btn-default" (click)="select()">
-           Select
-         </button>
-         <button *ngIf="selected" type="button" class="btn btn-default" (click)="deselect()">
-           Deselect
-         </button>
+         @if (!selected) {
+         <button type="button" class="btn btn-default" (click)="select()">Select</button>
+         } @else {
+         <button type="button" class="btn btn-default" (click)="deselect()">Deselect</button>
+         }
        </p>
      </div>
    </div>
@@ -68,28 +67,7 @@ In this exercise you will first create the FlightCardComponent shown. Then you w
 
    Note the data binding expressions in this template.
 
-4. Switch to the _flight-booking.module.ts_ file. Make sure that the new _FlightCardComponent_ is registered here.
-
-   <details>
-   <summary>Show source</summary>
-   <p>
-
-   ```typescript
-   @NgModule({
-     imports: [CommonModule, FormsModule, SharedModule],
-     declarations: [
-       FlightSearchComponent,
-       FlightCardComponent // <-- important
-     ],
-     exports: [FlightSearchComponent]
-   })
-   export class FlightBookingModule {}
-   ```
-
-   </p>
-   </details>
-
-5. Open the file _flight-search.component.ts_ and add the one property _basket_:
+4. Open the file _flight-search.component.ts_ and add the one property _basket_:
 
    ```typescript
    export class FlightSearchComponent {
@@ -107,9 +85,9 @@ In this exercise you will first create the FlightCardComponent shown. Then you w
    }
    ```
 
-6. Open the file _flight-search.component.html_. Comment out the tabular output of the flights found.
+5. Open the file _flight-search.component.html_. Comment out the tabular output of the flights found.
 
-7. Instead of the table, use the new element `flight-card` to display the flights found. To do this, create an explicit binding for the properties `item`, `selected` and the event `selectedChange`.
+6. Instead of the table, use the new element `flight-card` to display the flights found. To do this, create an explicit binding for the properties `item`, `selected` and the event `selectedChange`.
 
    <details>
    <summary>Show source</summary>
@@ -117,14 +95,18 @@ In this exercise you will first create the FlightCardComponent shown. Then you w
 
    ```html
    <div class="row">
-     <div *ngFor="let f of flights" class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
-       <app-flight-card [item]="f" [selected]="basket[f.id]" (selectedChange)="basket[f.id] = $event" />
+     @for (flight of flights; track flight.id) {
+     <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+       <app-flight-card [item]="flight" [selected]="basket[flight.id]" (selectedChange)="basket[flight.id] = $event" />
      </div>
+     }
    </div>
    ```
 
    </p>
    </details>
+
+7. Make sure that the new _FlightCardComponent_ is imported into the _FlightSearchComponent_.
 
 8. At the end of the template, also update the shopping cart so that the new property `basket` is output here instead of `selectedFlight`.
 
@@ -153,9 +135,11 @@ In this exercise you will first create the FlightCardComponent shown. Then you w
 
     ```html
     <div class="row">
-      <div *ngFor="let f of flights" class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
-        <app-flight-card [item]="f" [(selected)]="basket[f.id]" />
+      @for (flight of flights; track flight.id) {
+      <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+        <app-flight-card [item]="flight" [(selected)]="basket[flight.id]" />
       </div>
+      }
     </div>
     ```
 
@@ -164,7 +148,7 @@ In this exercise you will first create the FlightCardComponent shown. Then you w
 
 11. Test your solution.
 
-### FlightStatusToggleComponent \*\*
+### FlightStatusToggleComponent \*
 
 Create a _StatusToggleComponent_ that receives the delayed flag of a flight via two-way binding and displays it as a link. Each time you click on this link, the status should be changed. The component should be able to be called in the template of the FlightCardComponent as follows:
 
@@ -180,7 +164,7 @@ In this bonus exercise you create the possibility of expanding the display of th
 
    ```html
    <app-flight-card […]>
-     <pre>{{ f | json }}</pre>
+     <pre>{{ flight | json }}</pre>
    </app-flight-card>
    ```
 
@@ -194,7 +178,7 @@ In this bonus exercise you create the possibility of expanding the display of th
 
      […]
 
-     <ng-content></ng-content>
+     <ng-content />
    </div>
    […]
    ```
@@ -223,7 +207,7 @@ In this bonus exercise you create the possibility of expanding the display of th
    ```html
    <app-flight-card [...]>
      <h3 class="top">Flight</h3>
-     <app-flight-status-toggle class="bottom" style="margin-left: 10px" [(delayed)]="f.delayed" />
+     <app-flight-status-toggle class="bottom" style="margin-left: 10px" [(delayed)]="flight.delayed" />
    </app-flight-card>
    ```
 

@@ -29,8 +29,8 @@ In this exercise, you will write your own validator for your reactive form, whic
        return {
          city: {
            actualValue: c.value,
-           validCities: validCities.join(', ')
-         }
+           validCities: validCities.join(', '),
+         },
        };
      }
 
@@ -76,8 +76,12 @@ In this exercise, you will write your own validator for your reactive form, whic
 
    ```html
    [...]
+   
    <!-- better use your Validation Errors component -->
-   <div *ngIf="editForm.controls['from']?.hasError('city')" class="text-danger">...city...</div>
+   @if (editForm.controls['from']?.errors['city']) {
+      <div class="text-danger">...city...</div>
+   }
+   
    [...]
    ```
 
@@ -106,8 +110,8 @@ In this exercise, you will make the validator from the last exercise parameteriz
          return {
            city: {
              actualCity: c.value,
-             validCities: validCities.join(', ')
-           }
+             validCities: validCities.join(', '),
+           },
          };
        }
 
@@ -157,7 +161,7 @@ In this lab we want to add an asynchronous validator for validating the `from` c
      (c: AbstractControl): Observable<ValidationErrors | null> =>
        flightService.find(c.value, '').pipe(
          map((flights) => (flights.length > 0 ? null : { asyncCity: c.value })),
-         delay(2000) // <-- delay; can be removed later...
+         delay(2000), // <-- delay; can be removed later...
        );
    ```
 
@@ -166,7 +170,9 @@ In this lab we want to add an asynchronous validator for validating the `from` c
 3. Add a pending flag to your `flight-edit.component.html` like this:
 
    ```html
-   <div *ngIf="editForm.controls['from']?.pending">Checking city ...</div
+   @if (editForm.controls['from']?.pending) {
+      <div class="text-warning">Async city check</div>
+   }
    ```
 
 4. Don't forget to display the error.
@@ -285,7 +291,11 @@ In this exercise you will write a multifield validator that ensures that a diffe
 
    ```html
    [...]
-   <div *ngIf="editForm.hasError('roundTrip')" class="text-danger">...roundTrip...</div>
+   
+   @if (editForm.errors['roundTrip']) {
+      <div class="text-danger">Round trips are not allowed</div>
+   }
+   
    [...]
    ```
 

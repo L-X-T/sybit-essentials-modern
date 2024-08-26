@@ -22,9 +22,7 @@ You can use the following procedure as a guide:
 
 2. Set up a `CityValidatorDirective` directive in the new subfolder and assign the `[city]` selector.
 
-3. Make sure that the new directive is **both** declared **and** exported in the `SharedModule`.
-
-4. Set up a multi-provider in the directive that binds it to the token `NG_VALIDATORS`.
+3. Set up a multi-provider in the directive that binds it to the token `NG_VALIDATORS`.
 
    <details>
    <summary>Show source</summary>
@@ -48,7 +46,7 @@ You can use the following procedure as a guide:
    </p>
    </details>
 
-5. Let the directive implement the `Validator` interface. Check in the `validate` method whether the entry is for the cities of `Hamburg` or `Graz`. In all other cases an error should be reported.
+4. Let the directive implement the `Validator` interface. Check in the `validate` method whether the entry is for the cities of `Hamburg` or `Graz`. In all other cases an error should be reported.
 
    <details>
    <summary>Show source</summary>
@@ -79,7 +77,7 @@ You can use the following procedure as a guide:
    </p>
    </details>
 
-6. Go to the `FlightSearchComponent` and apply the new validation directive to the field `from`. In the event of an error, issue a message.
+5. Go to the `FlightSearchComponent` and apply the new validation directive to the field `from`. In the event of an error, issue a message.
 
    <details>
    <summary>Show source</summary>
@@ -90,12 +88,17 @@ You can use the following procedure as a guide:
    [...]
 
    <!-- better add this to your Validation Errors component -->
-   <div *ngIf="flightSearchForm.controls['from']?.hasError('city')" class="text-danger">... city ...</div>
+   @if (flightSearchForm.controls['from']?.errors['city']) {
+     <div class="text-danger">... city error msg ...</div>
+   }
+
    [...]
    ```
 
    </p>
    </details>
+
+6. Make sure that the new directive is imported into the _FlightSearchComponent_.
 
 7. Test your solution.
 
@@ -104,7 +107,7 @@ You can use the following procedure as a guide:
 In this exercise you will parameterize the validator from the last exercise so that the whitelist with the valid cities can be passed:
 
 ```html
-<input name="from" [(ngModel)]="from" [city]="['Graz', 'Hamburg']" />
+<input [...] name="from" [(ngModel)]="from" [...] [city]="['Graz', 'Hamburg']" />
 ```
 
 You can follow the following procedure:
@@ -143,7 +146,7 @@ You can follow the following procedure:
 2. Change to the file `flight-search.component.html` and pass a whitelist for the search field `from` when calling the directive.
 
 ```html
-<input [(ngModel)]="from" name="from" [city]="['Graz', 'Hamburg']" />
+<input [...] name="from" [(ngModel)]="from" [...] [city]="['Graz', 'Hamburg']" />
 ```
 
 3. Test your solution.
@@ -158,9 +161,7 @@ You can use the following procedure as a guide:
 
 1. Set up an `AsyncCityValidatorDirective` directive in the `shared/validation` folder and assign the `[asyncCity]` selector.
 
-2. Make sure that the directive is **both** declared **and** exported in the `SharedModule`.
-
-3. Set up a provider in the directive that binds it to the token `NG_ASYNC_VALIDATORS`.
+2. Set up a provider in the directive that binds it to the token `NG_ASYNC_VALIDATORS`.
 
    <details>
    <summary>Show source</summary>
@@ -184,7 +185,7 @@ You can use the following procedure as a guide:
    </p>
    </details>
 
-4. Inject the FlightService into the directive.
+3. Inject the FlightService into the directive.
 
    <details>
    <summary>Show source</summary>
@@ -204,7 +205,7 @@ You can use the following procedure as a guide:
    </p>
    </details>
 
-5. Let the directive implement the AsyncValidator interface. Check in the `validate` method whether there are flights in the web API that depart from this airport.
+4. Let the directive implement the AsyncValidator interface. Check in the `validate` method whether there are flights in the web API that depart from this airport.
 
    To do this, you can call the `find` method of the `FlightService` and transfer the current input for the `from` parameter and an empty string for the `to` parameter.
 
@@ -236,38 +237,49 @@ You can use the following procedure as a guide:
     </p>
     </details>
 
-6. Go to the `FlightSearchComponent` and apply the new validation directive to the field `from`. In the event of an error, issue a message.
+5. Go to the `FlightSearchComponent` and apply the new validation directive to the field `from`. In the event of an error, issue a message.
 
    <details>
    <summary>Show source</summary>
    <p>
 
    ```html
-   <input name="from" [(ngModel)]="from" required minlength="3" maxlength="15" pattern="[a-zA-ZäöüÄÖÜß ]*" asyncCity />
+   <input [...] name="from" [(ngModel)]="from" required minlength="3" maxlength="15" pattern="[a-zA-ZäöüÄÖÜß ]*" asyncCity />
    [...]
+   
    <!-- better add this to your Validation Errors component -->
-   <div *ngIf="flightSearchForm.controls['from']?.hasError('asyncCity')" class="text-danger">... asyncCity ...</div>
+   @if (flightSearchForm.controls['from']?.errors['asyncCity']) {
+     <div class="text-danger">... asyncCity error msg ...</div>
+   }
+
    [...]
    ```
 
    </p>
    </details>
 
-7. Also use the `pending` property of the `FormControl` to check whether asynchronous validations are still pending.
+6. Also use the `pending` property of the `FormControl` to check whether asynchronous validations are still pending.
 
    <details>
    <summary>Show source</summary>
    <p>
 
    ```html
-   <div *ngIf="flightSearchForm.controls['from']?.pending">... Executing Async Validator ...</div>
+   [...]
+   
+   @if (flightSearchForm.controls['from']?.pending) {
+     <div class="text-danger">Executing Async Validator</div>
+   }
+
    [...]
    ```
 
    </p>
    </details>
 
-8. Test your solution. **Please note** that Angular only runs asynchronous validators if none of the synchronous validators reports an error. For example, enter `Rom` in the whitelist of the synchronous validator. If you now search for `Rom`, all synchronous validators will validate this value correctly and the new asynchronous validator will return an error because `Rom` is not entered in the database.
+8. Make sure that the new directive is imported into the _FlightSearchComponent_.
+
+9. Test your solution. **Please note** that Angular only runs asynchronous validators if none of the synchronous validators reports an error. For example, enter `Rom` in the whitelist of the synchronous validator. If you now search for `Rom`, all synchronous validators will validate this value correctly and the new asynchronous validator will return an error because `Rom` is not entered in the database.
 
 ## Bonus: Multifield Validator \*
 
@@ -287,10 +299,10 @@ In this case, the `validate` method can convert the transferred `AbstractControl
 
 ```typescript
 validate(c: AbstractControl): ValidationErrors | null {
-  const group: FormGroup = c as FormGroup; // type cast
+  const form = c as FormGroup; // type cast
 
-  const fromCtrl = group.controls['from'];
-  const toCtrl = group.controls['to'];
+  const fromCtrl = form.controls['from'];
+  const toCtrl = form.controls['to'];
 
   if (!fromCtrl || !toCtrl || !fromCtrl.value) {
     return null;
@@ -307,19 +319,23 @@ A validation can be carried out with these controls:
 ```typescript
 if (fromCtrl.value === toCtrl.value) {
   return {
-    roundTrip: true
+    roundTrip: true,
   };
 }
 
 return null;
 ```
 
-After **registering and exporting** in the `SharedModule`, the validation directive can be used for the respective `from` element:
+After **importing** the validation directive in the `FlightSearchComponent`, it can be used for the respective `from` element:
 
 ```html
 <form #flightSearchForm="ngForm" roundTrip>
   [...]
-  <div *ngIf="flightSearchForm.hasError('roundTrip')">...roundTrip...</div>
+
+  @if (flightSearchForm.errors['roundTrip']) {
+    <div class="text-danger">Executing Async Validator</div>
+  }
+
   [...]
 </form>
 ```
@@ -331,18 +347,3 @@ The validator in the last example has hard-coded access to the fields `from` and
 ## Bonus: Asynchronous Multifield Validator \*\*\*
 
 Combine the information from the last few exercises to write an asynchronous multifield validator. This should check whether there are flights that lead from `from` to `to`.
-
-<!--
-  * [Bonus: Formatted date in text field ***](#bonus-formatted-date-in-text-field-)
-
-## Bonus: Formatted date in text field ***
-
-Write a directive with the help of which the date of birth of a passenger can be displayed and edited as a formatted date in a text field. You can find information on this in Manfred's blog at https://www.angulararchitects.io/aktuelles/parser-und-formatter-in-angular-2/.
--->
-<!--
-  * [Bonus: Component for editing a date ***](#bonus-component-for-editing-a-date-)
-
-## Bonus: Component for editing a date ***
-
-Write a component for editing a passenger's date of birth. You must implement the ControlValueAccessor interface so that this component interacts with Angular's forms handling. You can find information on this in Manfred's blog at https://www.angulararchitects.io/aktuelles/eigene-formular-steuerelemente-fuer-angular-2-schreiben/.
--->

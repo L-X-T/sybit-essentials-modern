@@ -84,7 +84,7 @@ In this exercise you will implement Preloading using Angular's `PreloadAllModule
 
    ```typescript
    RouterModule.forRoot(appRoutes, {
-     preloadingStrategy: PreloadAllModules
+     preloadingStrategy: PreloadAllModules,
    });
    ```
 
@@ -123,9 +123,11 @@ In this exercise you will implement Preloading using Angular's `PreloadAllModule
          Search
        </button>
 
-       <button *ngIf="flights.length > 0" type="button" class="btn btn-default" style="margin-left: 10px" (click)="delayFirstFlight()">
-         Delay 1st Flight
-       </button>
+       @if (flights.length > 0) {
+         <button type="button" class="btn btn-default" style="margin-left: 10px" (click)="delayFirstFlight()">
+           Delay 1st Flight
+         </button>
+       }
      </div>
      [...]
    ```

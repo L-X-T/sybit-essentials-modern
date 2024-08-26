@@ -36,6 +36,13 @@ You can follow these steps:
    ```
 
 2. Implement these files in the same way as the files for the `FlightSearchComponent` so that they will later list all the airports.
+
+   Note: we don't need a `Airport` class, the airports will just use type string:
+
+   ```typescript
+   airports: string[] = [];
+   ```
+
    <details>
    <summary>Show code</summary> 
    <p>
@@ -47,12 +54,12 @@ You can follow these steps:
 
    @Component({
      selector: 'app-airports',
-     templateUrl: './airports.component.html'
+     templateUrl: './airports.component.html',
    })
    export class AirportsComponent implements OnInit {
      airports: string[] = [];
 
-     private airportService = inject(AirportService);
+     private readonly airportService = inject(AirportService);
 
      ngOnInit(): void {
        this.airportService.findAll().subscribe((airports) => {
@@ -77,7 +84,9 @@ You can follow these steps:
 
      <div class="content">
        <div class="row">
-         <div *ngFor="let airport of airports" class="col-lg-3">{{ airport }}</div>
+         @for (airport of airports; track airport) {
+           <div class="col-lg-3">{{ airport }}</div>
+         }
        </div>
      </div>
    </div>
@@ -117,7 +126,7 @@ You can follow these steps:
    import { Observable } from 'rxjs';
 
    @Injectable({
-     providedIn: 'root'
+     providedIn: 'root',
    })
    export class AirportService {
      private readonly url = 'http://www.angular.at/api/airport';
@@ -285,7 +294,9 @@ Import `takeUntil` from `rxjs/operators`. Now let's show this airports in anothe
 
   <div class="content">
     <div class="row">
-      <div *ngFor="let airport of takeUntilAirports" class="col-lg-3">{{ airport }}</div>
+      @for (airport of takeUntilAirports; track airport) {
+        <div class="col-lg-3">{{ airport }}</div>
+      }
     </div>
   </div>
 </div>
@@ -312,7 +323,9 @@ In the third and last approach we'll use the Angular `async` Pipe. We don't need
 
   <div class="content">
     <div class="row">
-      <div *ngFor="let airport of airports" class="col-lg-3">{{ airport }}</div>
+      @for (airport of airports; track airport) {
+        <div class="col-lg-3">{{ airport }}</div>
+      }
     </div>
   </div>
 </div>
@@ -324,7 +337,9 @@ In the third and last approach we'll use the Angular `async` Pipe. We don't need
 Now all we need to do is replace the `airports` with our `Observable` and then add the `async` Pipe right after that.
 
 ```html
-<div class="col-lg-3" *ngFor="let airport of airports$ | async">{{ airport }}</div>
+@for (airport of airports$ | async; track airport) {
+  <div class="col-lg-3">{{ airport }}</div>
+}
 ```
 
 Test your solution.
@@ -361,18 +376,17 @@ Import `delay` from `rxjs/operators`. Now add a flag that shows a loading indica
 
 ```html
 <div class="content">
-  <div *ngIf="(airports$ | async) as asyncAirports else isLoadingAsyncAirports" class="row">
-    <div *ngFor="let airport of asyncAirports" class="col-lg-3">{{ airport }}</div>
+  <div class="row">
+    @let asyncAirports = airports$ | async;
+    @if (asyncAirports) {
+      @for (airport of asyncAirports; track airport) {
+        <div class="col-lg-3">{{ airport }}</div>
+      }
+    } @else {
+      <div class="col-lg-3">...isLoadingAirports...</div>
+    }
   </div>
 </div>
-
-[...]
-
-<ng-template #isLoadingAsyncAirports>
-  <div class="row">
-    <div class="col-lg-3">...isLoadingAsyncPipe</div>
-  </div>
-</ng-template>
 ```
 
 </p>

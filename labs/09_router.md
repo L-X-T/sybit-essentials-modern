@@ -46,16 +46,16 @@ If you want, guide the following through the exercise:
      {
        path: '',
        redirectTo: 'home',
-       pathMatch: 'full'
+       pathMatch: 'full',
      },
      {
        path: 'home',
-       component: HomeComponent
+       component: HomeComponent,
      },
      {
        path: '**',
-       redirectTo: 'home'
-     }
+       redirectTo: 'home',
+     },
    ];
    ```
 
@@ -75,10 +75,10 @@ If you want, guide the following through the exercise:
        FormsModule,
        FlightBookingModule,
        HttpClientModule,
-       RouterModule.forRoot(appRoutes) // <-- Add this line!
+       RouterModule.forRoot(appRoutes), // <-- Add this line!
      ],
      declarations: [AppComponent, SidebarComponent, NavbarComponent, HomeComponent],
-     bootstrap: [AppComponent]
+     bootstrap: [AppComponent],
    })
    export class AppModule {}
    ```
@@ -98,12 +98,12 @@ If you want, guide the following through the exercise:
    export const flightBookingRoutes: Routes = [
      {
        path: 'flight-search',
-       component: FlightSearchComponent
+       component: FlightSearchComponent,
      },
      {
        path: 'passenger-search',
-       component: PassengerSearchComponent
-     }
+       component: PassengerSearchComponent,
+     },
    ];
    ```
 
@@ -123,10 +123,10 @@ If you want, guide the following through the exercise:
        FormsModule,
        SharedModule,
 
-       RouterModule.forChild(flightBookingRoutes) // <-- Add this line!
+       RouterModule.forChild(flightBookingRoutes), // <-- Add this line!
      ],
      declarations: [FlightSearchComponent, FlightCardComponent, PassengerSearchComponent, FlightEditComponent],
-     exports: [FlightSearchComponent]
+     exports: [FlightSearchComponent],
    })
    export class FlightBookingModule {}
    ```
@@ -231,7 +231,7 @@ This should receive an Id as a url segment and a matrix parameter showDetails wh
    ```typescript
    @Component({
      selector: 'app-flight-edit',
-     templateUrl: './flight-edit.component.html'
+     templateUrl: './flight-edit.component.html',
    })
    export class FlightEditComponent implements OnChanges {
      id?: number | null;
@@ -433,21 +433,23 @@ In this exercise you create the opportunity to edit the flight presented in the 
 4. Open the file `flight-edit.component.html` and provide a form for editing the loaded flight:
 
    ```html
-   <form *ngIf="flight">
-     <div class="form-group">
-       <label>Id:</label>
-       <input class="form-control" name="id" [(ngModel)]="flight.id" />
-     </div>
+   @if (flight) {
+     <form>
+       <div class="form-group">
+         <label for="id">Id:</label>
+         <input name="id" class="form-control" [(ngModel)]="flight.id" />
+       </div>
 
-     <div class="form-group">
-       <label>From:</label>
-       <input class="form-control" name="from" [(ngModel)]="flight.from" />
-     </div>
+       <div class="form-group">
+         <label for="from">From:</label>
+         <input name="from" class="form-control" [(ngModel)]="flight.from" />
+       </div>
 
-     <!-- Add more fields for the other attributes of flight -->
+       <!-- Add more fields for the other attributes of flight -->
 
-     <button type="submit" class="btn btn-default" (click)="save()">Save</button>
-   </form>
+       <button type="submit" class="btn btn-default" (click)="save()">Save</button>
+     </form>
+   }
    ```
 
 5. If - and only if - you have not provided your `FlightService` in root (the `AppModule` via the `@Injectable()` decorator). Open the file `flight-booking.module.ts` and make sure that the `FlightService` is registered here.
@@ -461,9 +463,9 @@ In this exercise you create the opportunity to edit the flight presented in the 
      imports: [CommonModule, FormsModule, SharedModule, RouterModule.forChild(flightBookingRoutes)],
      declarations: [FlightSearchComponent, FlightCardComponent, PassengerSearchComponent, FlightEditComponent],
      providers: [
-       FlightService // <-- this is important
+       FlightService, // <-- this is important
      ],
-     exports: [FlightSearchComponent]
+     exports: [FlightSearchComponent],
    })
    export class FlightBookingModule {}
    ```

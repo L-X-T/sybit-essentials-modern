@@ -56,7 +56,7 @@ In this first part of the exercise you will implement the _FlightSearchComponent
    ```typescript
    @Component({
      selector: 'app-flight-search',
-     templateUrl: './flight-search.component.html'
+     templateUrl: './flight-search.component.html',
    })
    export class FlightSearchComponent {
      from = '';
@@ -77,6 +77,8 @@ In this first part of the exercise you will implement the _FlightSearchComponent
    ```
 
 5. Now implement the method _search_, so that it takes the _from_ and _to_ parameter and uses the injected `HttpClient` to search for flights and put them into `flights`.
+
+   Note: You can use this API endpoint: http://www.angular.at/api/flight
 
    <details>
    <summary>Show source</summary>
@@ -104,7 +106,7 @@ In this first part of the exercise you will implement the _FlightSearchComponent
  </p>
  </details>
 
-7. Switch to `flight-search.component.html`, the corresponding HTML template and insert a div with the search form. You can use the following HTML, but you have to add the **data binding**:
+6. Switch to `flight-search.component.html`, the corresponding HTML template and insert a div with the search form. You can use the following HTML, but you have to add the **data binding**:
 
    ```html
    <div class="card">
@@ -132,7 +134,7 @@ In this first part of the exercise you will implement the _FlightSearchComponent
    </div>
    ```
 
-8. Make sure the button is only enabled if `from` and `to` are set.
+7. Make sure the button is only enabled if `from` and `to` are set.
 
    <details>
    <summary>Show source incl. data bindings</summary>
@@ -167,7 +169,7 @@ In this first part of the exercise you will implement the _FlightSearchComponent
    </p>
    </details>
 
-9. Add another section to your template that lists the found flights in a table. Again you can use this HTML fragment, but you have to add the **data binding**:
+8. Add another section to your template that lists the found flights in a table. Again you can use this HTML fragment, but you have to add the **data binding**:
 
    ```html
    <div class="card">
@@ -203,7 +205,8 @@ In this first part of the exercise you will implement the _FlightSearchComponent
 
    ```html
    <div class="card">
-     <table *ngIf="flights.length > 0" class="table table-condensed">
+     @if (flights.length > 0) {
+     <table class="table table-condensed">
        <thead>
          <tr>
            <th>Id</th>
@@ -215,32 +218,35 @@ In this first part of the exercise you will implement the _FlightSearchComponent
        </thead>
 
        <tbody>
-         <tr *ngFor="let f of flights" [class.active]="f === selectedFlight">
-           <td>{{ f.id }}</td>
-           <td>{{ f.from }}</td>
-           <td>{{ f.to }}</td>
-           <td>{{ f.date | date:'dd.MM.yyyy HH:mm' }}</td>
+         @for (flight of flights; track flight.id) {
+         <tr [class.active]="flight === selectedFlight">
+           <td>{{ flight.id }}</td>
+           <td>{{ flight.from }}</td>
+           <td>{{ flight.to }}</td>
+           <td>{{ flight.date | date:'dd.MM.yyyy HH:mm' }}</td>
            <td><a (click)="select(f)">Select</a></td>
          </tr>
+         }
        </tbody>
      </table>
+     }
    </div>
    ```
 
     </p>
     </details>
 
-10. Add a third section to your template. It should present the selected flight:
+9. Add a third section to your template. It should present the selected flight:
 
-    ```html
-    <div class="card">
-      <div class="content">
-        <pre>{{ selectedFlight | json }}</pre>
-      </div>
-    </div>
-    ```
+   ```html
+   <div class="card">
+     <div class="content">
+       <pre>{{ selectedFlight | json }}</pre>
+     </div>
+   </div>
+   ```
 
-11. Open the file _app.module.ts_ make sure, that the new _FlightSearchComponent_ is registered in _declarations_.
+10. Open the file _app.module.ts_ make sure, that the new _FlightSearchComponent_ is registered in _declarations_.
 
      <details>
      <summary>Show source</summary>
@@ -266,7 +272,7 @@ In this first part of the exercise you will implement the _FlightSearchComponent
      </p>
      </details>
 
-12. Switch to the file _app.component.html_, to call the new component:
+11. Switch to the file _app.component.html_, to call the new component:
 
     ```html
     […]
@@ -276,9 +282,9 @@ In this first part of the exercise you will implement the _FlightSearchComponent
     […]
     ```
 
-13. Check for compilation errors on the console.
+12. Check for compilation errors on the console.
 
-14. Start your solution (`npm start`) and test it in the browser by search for flights from `Graz` to `Hamburg`. A list with other supported (European) cites can be found [here](http://angular.at/api/airport).
+13. Start your solution (`npm start`) and test it in the browser by search for flights from `Graz` to `Hamburg`. A list with other supported (European) cites can be found [here](http://angular.at/api/airport).
 
 ### Use the debugger
 
@@ -327,8 +333,8 @@ Follow these steps:
 
    ```typescript
      this.http
-     .post<Flight>(url, this.selectedFlight, { headers })
-     .subscribe( ... );
+       .post<Flight>(url, this.selectedFlight, { headers })
+       .subscribe( ... );
    ```
 
    <details>
@@ -358,10 +364,11 @@ Follow these steps:
    </p>
    </details>
 
-3. Create the option to edit the _selectedFlight_ in the template. In order to avoid zero accesses, you should check with _\*ngIf_ whether there is a selected flight. You can use the following HTML fragment, which you still need to add data binding expressions:
+3. Create the option to edit the _selectedFlight_ in the template. In order to avoid zero accesses, you should check with _@if_ whether there is a selected flight. You can use the following HTML fragment, which you still need to add data binding expressions:
 
    ```html
-   <div *ngIf="selectedFlight">
+   @if (selectedFlight) {
+   <div>
      <div>{{ message }}</div>
 
      <div class="form-group">
@@ -380,6 +387,7 @@ Follow these steps:
 
      <button type="submit" class="btn btn-default">Save</button>
    </div>
+   }
    ```
 
    <details>
@@ -387,7 +395,8 @@ Follow these steps:
    <p>
 
    ```html
-   <div *ngIf="selectedFlight">
+   @if (selectedFlight) {
+   <div>
      <div>{{ message }}</div>
 
      <div class="form-group">
@@ -406,6 +415,7 @@ Follow these steps:
 
      <button type="submit" class="btn btn-default" (click)="save()">Save</button>
    </div>
+   }
    ```
 
    </p>

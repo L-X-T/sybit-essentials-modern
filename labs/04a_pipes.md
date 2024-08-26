@@ -23,7 +23,7 @@
 
    @Pipe({
      name: 'city',
-     pure: true // actually not necessary since it's the default
+     pure: true, // actually not necessary since it's the default
    })
    export class CityPipe implements PipeTransform {
      transform(value: string, fmt: string): string {
@@ -93,7 +93,8 @@
 
    ```html
    <div class="card">
-     <table *ngIf="flights.length > 0" class="table table-condensed">
+     @if (flights.length > 0) {
+     <table class="table table-condensed">
        <thead>
          <tr>
            <th>Id</th>
@@ -105,15 +106,18 @@
        </thead>
 
        <tbody>
-         <tr *ngFor="let f of flights" [class.active]="f === selectedFlight">
-           <td>{{ f.id }}</td>
-           <td>{{ f.from | city:'short' }}</td>
-           <td>{{ f.to | city:'long' }}</td>
-           <td>{{ f.date | date:'dd.MM.yyyy HH:mm' }}</td>
+         @for (flight of flights; track flight.id) {
+         <tr [class.active]="flight === selectedFlight">
+           <td>{{ flight.id }}</td>
+           <td>{{ flight.from | city:'short' }}</td>
+           <td>{{ flight.to | city:'long' }}</td>
+           <td>{{ flight.date | date:'dd.MM.yyyy HH:mm' }}</td>
            <td><a (click)="select(f)">Select</a></td>
          </tr>
+         }
        </tbody>
      </table>
+     }
    </div>
    ```
 
@@ -129,7 +133,7 @@
 Create a _StatusColorPipe_, which maps the property _delayed_ of the flight (true or false) to a color. Use this pipe together with the _ngStyle_ directive to assign this color to the CSS property _color_ of the output status:
 
 ```html
-<td [style.color]="f.delayed | statusColor">{{ f.date | date:'dd.MM.yyyy HH:mm'}}</td>
+<td [style.color]="flight.delayed | statusColor">{{ flight.date | date:'dd.MM.yyyy HH:mm'}}</td>
 ```
 
 ### Bonus: StatusFilterPipe \*
@@ -137,9 +141,11 @@ Create a _StatusColorPipe_, which maps the property _delayed_ of the flight (tru
 Create a _StatusFilterPipe_, which filters an array with flights, so that only flights with a certain value for _delayed_ are returned. The pipe should be able to be used as follows:
 
 ```html
-<tr *ngFor="let f of flights | statusFilter:true">
+@for (flight of flights | statusFilter:true; track flight.id) {
+<tr>
   […]
 </tr>
+}
 ```
 
 The parameter _true_ indicates that only the flights with _delayed = true_ are to be returned.
@@ -171,7 +177,7 @@ Expand your airport service with methods that return the long or short name of a
 Write a new `AsyncCityPipe` that injects this service. The `transform` method should delegate to the service and return the desired result in the form of the received as _Observable&lt;string&gt;_. In order for Angular to be able to resolve this observable, the async pipe must also be used in the template:
 
 ```html
-[...] {{ f.from | asyncCity:'short' | async }} [...]
+[...] {{ flight.from | asyncCity:'short' | async }} [...]
 ```
 
 **Important:** The pipe must be `pure` to avoid problems with the data binding. Pipes that are not pure are re-executed after each event. The fact that the pipe itself triggers a data event through the server request would result in an infinite loop.
