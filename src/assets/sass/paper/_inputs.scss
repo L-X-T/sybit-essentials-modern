@@ -1,12 +1,15 @@
 .form-control::-moz-placeholder {
   @include placeholder($medium-gray, 1);
 }
+
 .form-control:-moz-placeholder {
   @include placeholder($medium-gray, 1);
 }
+
 .form-control::-webkit-input-placeholder {
   @include placeholder($medium-gray, 1);
 }
+
 .form-control:-ms-input-placeholder {
   @include placeholder($medium-gray, 1);
 }
@@ -37,20 +40,25 @@
   .has-success & {
     background-color: $success-input-bg;
     color: $success-color;
+
     &.border-input {
       border: 1px solid $success-color;
     }
   }
+
   .has-success &:focus {
     background-color: $white-bg;
   }
+
   .has-error & {
     background-color: $danger-input-bg;
     color: $danger-color;
+
     &.border-input {
       border: 1px solid $danger-color;
     }
   }
+
   .has-error &:focus {
     background-color: $white-bg;
   }
@@ -64,9 +72,11 @@
     top: 50%;
     vertical-align: middle;
   }
+
   &.border-input {
     border: 1px solid $table-line-color;
   }
+
   .open & {
     border-bottom-color: transparent;
   }
@@ -83,6 +93,7 @@
     color: $danger-color;
   }
 }
+
 .has-success {
   .form-control-feedback,
   .control-label {
@@ -99,42 +110,51 @@
   .has-error & {
     background-color: $white-color;
   }
+
   .has-error .form-control:focus + & {
     color: $danger-color;
   }
+
   .has-success .form-control:focus + & {
     color: $success-color;
   }
+
   .form-control:focus + &,
   .form-control:focus ~ & {
     background-color: $white-color;
   }
 }
+
 .border-input {
   .input-group-addon {
     border: solid 1px $table-line-color;
   }
 }
+
 .input-group {
   margin-bottom: 15px;
 }
+
 .input-group[disabled] {
   .input-group-addon {
     background-color: $light-gray;
   }
 }
+
 .input-group .form-control:first-child,
 .input-group-addon:first-child,
 .input-group-btn:first-child > .dropdown-toggle,
 .input-group-btn:last-child > .btn:not(:last-child):not(.dropdown-toggle) {
   border-right: 0 none;
 }
+
 .input-group .form-control:last-child,
 .input-group-addon:last-child,
 .input-group-btn:last-child > .dropdown-toggle,
 .input-group-btn:first-child > .btn:not(:first-child) {
   border-left: 0 none;
 }
+
 .form-control[disabled],
 .form-control[readonly],
 fieldset[disabled] .form-control {
@@ -142,22 +162,28 @@ fieldset[disabled] .form-control {
   cursor: not-allowed;
   @include placeholder($dark-gray, 1);
 }
+
 .form-control[disabled]::-moz-placeholder {
   @include placeholder($dark-gray, 1);
 }
+
 .form-control[disabled]:-moz-placeholder {
   @include placeholder($medium-gray, 1);
 }
+
 .form-control[disabled]::-webkit-input-placeholder {
   @include placeholder($medium-gray, 1);
 }
+
 .form-control[disabled]:-ms-input-placeholder {
   @include placeholder($medium-gray, 1);
 }
+
 .input-group-btn .btn {
   border-width: $border-thin;
   padding: $padding-round-vertical $padding-base-horizontal;
 }
+
 .input-group-btn .btn-default:not(.btn-fill) {
   border-color: $medium-gray;
 }
@@ -165,6 +191,7 @@ fieldset[disabled] .form-control {
 .input-group-btn:last-child > .btn {
   margin-left: 0;
 }
+
 textarea.form-control {
   max-width: 100%;
   padding: 10px 18px;

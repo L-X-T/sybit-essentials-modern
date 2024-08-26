@@ -16,12 +16,14 @@
   border-radius: 8px 0 0 8px;
   text-align: center;
 }
+
 .fixed-plugin .fa-cog {
   color: #ffffff;
   padding: 10px;
   border-radius: 0 0 6px 6px;
   width: auto;
 }
+
 .fixed-plugin .dropdown-menu {
   right: 80px;
   left: auto;
@@ -29,15 +31,18 @@
   border-radius: 10px;
   padding: 10px;
 }
+
 .fixed-plugin .dropdown-menu:after,
 .fixed-plugin .dropdown-menu:before {
   right: 10px;
   margin-left: auto;
   left: auto;
 }
+
 .fixed-plugin .fa-circle-thin {
   color: #ffffff;
 }
+
 .fixed-plugin .active .fa-circle-thin {
   color: #00bbff;
 }
@@ -77,24 +82,31 @@
 .fixed-plugin .badge-white {
   background-color: #ebebeb;
 }
+
 .fixed-plugin .badge-black {
   background-color: #212120;
 }
+
 .fixed-plugin .badge-primary {
   background-color: #7a9e9f;
 }
+
 .fixed-plugin .badge-info {
   background-color: #68b3c8;
 }
+
 .fixed-plugin .badge-success {
   background-color: #7ac29a;
 }
+
 .fixed-plugin .badge-warning {
   background-color: #f3bb45;
 }
+
 .fixed-plugin .badge-danger {
   background-color: #dd0330;
 }
+
 .fixed-plugin .badge-brown {
   background-color: #66615b;
 }
@@ -103,6 +115,7 @@
   font-size: 14px;
   margin: 10px;
 }
+
 .fixed-plugin .dropdown-menu li {
   display: block;
   padding: 10px 5px;
@@ -120,6 +133,7 @@
 .fixed-plugin li.button-container {
   height: auto;
 }
+
 .fixed-plugin li.button-container div {
   margin-bottom: 5px;
 }
@@ -145,9 +159,11 @@
   margin-bottom: 0;
   font-size: 1em;
 }
+
 .fixed-plugin .adjustments-line .switch {
   float: right;
 }
+
 .fixed-plugin .dropdown-menu > li.adjustments-line > a {
   padding-right: 0;
   padding-left: 0;
@@ -171,9 +187,11 @@
   float: left;
   font-weight: 600;
 }
+
 .fixed-plugin .btn-social i {
   margin-right: 5px;
 }
+
 .fixed-plugin .btn-social:first-child {
   margin-right: 2%;
 }

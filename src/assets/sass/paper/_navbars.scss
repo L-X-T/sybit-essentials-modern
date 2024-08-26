@@ -6,6 +6,7 @@
     }
   }
 }
+
 .navbar {
   border: $none;
   border-radius: 0;
@@ -17,6 +18,7 @@
     padding: $navbar-padding-brand;
     font-size: $font-size-large-navbar;
   }
+
   .navbar-nav {
     > li > a {
       line-height: 1.42857;
@@ -28,20 +30,24 @@
         display: inline-block;
         margin: 0;
       }
+
       i {
         position: relative;
         top: 1px;
       }
     }
+
     > li > a.btn {
       margin: $navbar-margin-a-btn;
       padding: $padding-base-vertical $padding-base-horizontal;
     }
   }
+
   .btn {
     margin: $navbar-margin-btn;
     font-size: $font-size-base;
   }
+
   .btn-simple {
     font-size: $font-size-medium;
   }
@@ -59,6 +65,7 @@
   .brand {
     color: $font-color !important;
   }
+
   .navbar-nav {
     > li > a:not(.btn) {
       color: $dark-gray;
@@ -98,6 +105,7 @@
     color: $info-color;
     border-color: $info-color;
   }
+
   &:not(.navbar-transparent) .btn-neutral,
   &:not(.navbar-transparent) .btn-neutral:hover,
   &:not(.navbar-transparent) .btn-neutral:active {
@@ -107,6 +115,7 @@
 
 .navbar-form {
   @include box-shadow(none);
+
   .form-control {
     @include light-form();
     height: 22px;
@@ -114,6 +123,7 @@
     line-height: $line-height-general;
     color: $light-gray;
   }
+
   .navbar-transparent & .form-control,
   [class*='navbar-ct'] & .form-control {
     color: $white-color;
@@ -125,15 +135,19 @@
 .navbar-ct-primary {
   @include navbar-color($bg-primary);
 }
+
 .navbar-ct-info {
   @include navbar-color($bg-info);
 }
+
 .navbar-ct-success {
   @include navbar-color($bg-success);
 }
+
 .navbar-ct-warning {
   @include navbar-color($bg-warning);
 }
+
 .navbar-ct-danger {
   @include navbar-color($bg-danger);
 }
@@ -152,6 +166,7 @@
   .icon-bar {
     background-color: $white-color;
   }
+
   .navbar-collapse,
   .navbar-form {
     border-color: transparent;

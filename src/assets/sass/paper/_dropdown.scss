@@ -38,6 +38,7 @@
     @include transition($fast-transition-time, $transition-linear);
     margin-top: -20px;
   }
+
   .select.open & {
     margin-top: -1px;
   }
@@ -52,6 +53,7 @@
       margin-top: -3px;
     }
   }
+
   > li > a:focus {
     outline: 0 !important;
   }
@@ -87,18 +89,22 @@
   &.dropdown-primary > li > a:focus {
     background-color: $primary-color;
   }
+
   &.dropdown-info > li > a:hover,
   &.dropdown-info > li > a:focus {
     background-color: $info-color;
   }
+
   &.dropdown-success > li > a:hover,
   &.dropdown-success > li > a:focus {
     background-color: $success-color;
   }
+
   &.dropdown-warning > li > a:hover,
   &.dropdown-warning > li > a:focus {
     background-color: $warning-color;
   }
+
   &.dropdown-danger > li > a:hover,
   &.dropdown-danger > li > a:focus {
     background-color: $danger-color;
@@ -109,6 +115,7 @@
 .btn-group.select {
   overflow: hidden;
 }
+
 .btn-group.select.open {
   overflow: visible;
 }

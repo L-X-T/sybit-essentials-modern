@@ -6,6 +6,7 @@
   z-index: 1;
   background-size: cover;
   background-position: center center;
+
   .sidebar-wrapper {
     position: relative;
     max-height: none;
@@ -15,6 +16,7 @@
     z-index: 4;
     box-shadow: inset -1px 0px 0px 0px $medium-gray;
   }
+
   .sidebar-background {
     position: absolute;
     z-index: 1;
@@ -27,11 +29,13 @@
     background-position: center center;
   }
 }
+
 .sidebar,
 .off-canvas-sidebar {
   width: 260px;
   display: block;
   font-weight: 200;
+
   .logo-img {
     width: 42px;
     max-height: 42px;
@@ -43,6 +47,7 @@
       position: absolute;
     }
   }
+
   .logo {
     padding: 18px 0px;
     margin: 0 20px;
@@ -144,6 +149,7 @@
   &[data-background-color='white'] {
     @include sidebar-background-color($white-background-color, $default-color);
   }
+
   &[data-background-color='black'] {
     @include sidebar-background-color($black-background-color, $white-color);
   }
@@ -151,15 +157,19 @@
   &[data-active-color='primary'] {
     @include sidebar-active-color($primary-color);
   }
+
   &[data-active-color='info'] {
     @include sidebar-active-color($info-color);
   }
+
   &[data-active-color='success'] {
     @include sidebar-active-color($success-color);
   }
+
   &[data-active-color='warning'] {
     @include sidebar-active-color($warning-color);
   }
+
   &[data-active-color='danger'] {
     @include sidebar-active-color($danger-color);
   }

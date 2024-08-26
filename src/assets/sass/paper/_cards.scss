@@ -21,12 +21,15 @@
       width: 100%;
     }
   }
+
   .content {
     padding: 15px 15px 10px 15px;
   }
+
   .header {
     padding: 20px 20px 0;
   }
+
   .description {
     font-size: $font-paragraph;
     color: $font-color;
@@ -36,12 +39,14 @@
     font-size: $font-size-small;
     margin: 0;
   }
+
   .category,
   label {
     font-size: $font-size-base;
     font-weight: $font-weight-normal;
     color: $dark-gray;
     margin-bottom: 0px;
+
     i {
       font-size: $font-paragraph;
     }
@@ -57,6 +62,7 @@
     color: $card-black-color;
     font-weight: $font-weight-light;
   }
+
   .avatar {
     width: 50px;
     height: 50px;
@@ -64,6 +70,7 @@
     border-radius: 50%;
     margin-right: 5px;
   }
+
   .footer {
     padding: 0;
     line-height: 30px;
@@ -77,15 +84,18 @@
       margin-bottom: 5px;
     }
   }
+
   .stats {
     color: #a9a9a9;
     font-weight: 300;
+
     i {
       margin-right: 2px;
       min-width: 15px;
       display: inline-block;
     }
   }
+
   .footer div {
     display: inline-block;
   }
@@ -95,6 +105,7 @@
     font-weight: $font-weight-bold;
     text-transform: uppercase;
   }
+
   .author i {
     font-size: $font-size-base;
   }
@@ -130,26 +141,32 @@
     border-radius: $border-radius-base;
     position: relative;
   }
+
   .icon-big {
     font-size: 3em;
     min-height: 64px;
   }
+
   .numbers {
     font-size: 2em;
     text-align: right;
+
     p {
       margin: 0;
     }
   }
+
   ul.team-members {
     li {
       padding: 10px 0px;
+
       &:not(:last-child) {
         border-bottom: 1px solid $medium-pale-bg;
       }
     }
   }
 }
+
 .card-user {
   .image {
     border-radius: 8px 8px 0 0;
@@ -161,21 +178,26 @@
       width: 100%;
     }
   }
+
   .image-plain {
     height: 0;
     margin-top: 110px;
   }
+
   .author {
     text-align: center;
     text-transform: none;
     margin-top: -65px;
+
     .title {
       color: $default-states-color;
+
       small {
         color: $card-muted-color;
       }
     }
   }
+
   .avatar {
     width: 100px;
     height: 100px;
@@ -186,17 +208,21 @@
     &.border-white {
       border: 5px solid $white-color;
     }
+
     &.border-gray {
       border: 5px solid $card-muted-color;
     }
   }
+
   .title {
     font-weight: 600;
     line-height: 24px;
   }
+
   .description {
     margin-top: 10px;
   }
+
   .content {
     min-height: 200px;
   }
@@ -219,15 +245,18 @@
     }
   }
 }
+
 .card-user,
 .card-price {
   .footer {
     padding: 5px 15px 10px;
   }
+
   hr {
     margin: 5px 15px;
   }
 }
+
 .card-plain {
   background-color: transparent;
   box-shadow: none;

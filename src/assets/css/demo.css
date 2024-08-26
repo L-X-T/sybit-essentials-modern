@@ -18,6 +18,7 @@
   clear: both;
   overflow: hidden;
 }
+
 .icon-container {
   width: 240px;
   padding: 0.7em 0;
@@ -25,6 +26,7 @@
   position: relative;
   text-align: left;
 }
+
 .icon-container [class^='ti-'],
 .icon-container [class*=' ti-'] {
   color: #000;
@@ -33,20 +35,24 @@
   transition: 0.3s;
   font-size: 1.2em;
 }
+
 .icon-container:hover [class^='ti-'],
 .icon-container:hover [class*=' ti-'] {
   font-size: 2.2em;
   margin-top: -5px;
 }
+
 .icon-container:hover .icon-name {
   color: #000;
 }
+
 .icon-name {
   color: #aaa;
   margin-left: 35px;
   font-size: 0.8em;
   transition: 0.3s;
 }
+
 .icon-container:hover .icon-name {
   margin-left: 45px;
 }
@@ -54,11 +60,13 @@
 .places-buttons .btn {
   margin-bottom: 30px;
 }
+
 .sidebar .nav > li.active-pro {
   position: absolute;
   width: 100%;
   bottom: 10px;
 }
+
 .sidebar .nav > li.active-pro a {
   background: rgba(255, 255, 255, 0.14);
   opacity: 1;

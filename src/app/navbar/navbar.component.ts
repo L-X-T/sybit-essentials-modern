@@ -4,7 +4,7 @@ import { Component } from '@angular/core';
   standalone: true,
   selector: 'app-navbar',
   templateUrl: 'navbar.component.html',
-  styleUrl: 'navbar.component.css'
+  styleUrl: 'navbar.component.css',
 })
 export class NavbarComponent {
   private sidebarVisible = false;

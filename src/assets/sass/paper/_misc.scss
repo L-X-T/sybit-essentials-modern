@@ -5,6 +5,7 @@
   height: 100%;
   text-align: center;
 }
+
 .loader,
 .loader:before,
 .loader:after {
@@ -16,6 +17,7 @@
   -webkit-animation: load7 1.8s infinite ease-in-out;
   animation: load7 1.8s infinite ease-in-out;
 }
+
 .loader {
   color: #9a9a9a;
   top: calc(50% - 40px);
@@ -25,20 +27,24 @@
   -webkit-animation-delay: -0.16s;
   animation-delay: -0.16s;
 }
+
 .loader:before,
 .loader:after {
   content: '';
   position: absolute;
   top: 0;
 }
+
 .loader:before {
   left: -3.5em;
   -webkit-animation-delay: -0.32s;
   animation-delay: -0.32s;
 }
+
 .loader:after {
   left: 3.5em;
 }
+
 @-webkit-keyframes load7 {
   0%,
   80%,
@@ -49,6 +55,7 @@
     box-shadow: 0 2.5em 0 0;
   }
 }
+
 @keyframes load7 {
   0%,
   80%,
@@ -64,11 +71,13 @@ body {
   color: $font-color;
   font-size: $font-size-base;
   font-family: 'Muli', Arial, sans-serif;
+
   .wrapper {
     min-height: 100vh;
     position: relative;
   }
 }
+
 a {
   color: $info-color;
 
@@ -87,6 +96,7 @@ select::-moz-focus-inner,
 input[type='file'] > input[type='button']::-moz-focus-inner {
   outline: 0 !important;
 }
+
 .ui-slider-handle:focus,
 .navbar-toggle,
 input:focus,
@@ -111,10 +121,12 @@ button:focus {
 .btn {
   @include transition($ultra-fast-transition-time, $transition-ease-in);
 }
+
 .fa {
   width: 21px;
   text-align: center;
 }
+
 .fa-base {
   font-size: 1.25em !important;
 }
@@ -122,9 +134,11 @@ button:focus {
 .margin-top {
   margin-top: 50px;
 }
+
 hr {
   border-color: $medium-pale-bg;
 }
+
 .wrapper {
   position: relative;
   top: 0;

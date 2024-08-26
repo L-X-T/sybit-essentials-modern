@@ -8,7 +8,7 @@ import { NavbarComponent } from './navbar/navbar.component';
   imports: [SidebarComponent, NavbarComponent],
   selector: 'app-flight-app',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.css'],
 })
 export class AppComponent {
   title = 'Hello World!';
