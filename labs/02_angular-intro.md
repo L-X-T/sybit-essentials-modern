@@ -169,7 +169,26 @@ In this first part of the exercise you will implement the _FlightSearchComponent
    </p>
    </details>
 
-8. Add another section to your template that lists the found flights in a table. Again you can use this HTML fragment, but you have to add the **data binding**:
+8. Make sure to import the _CommonModule_ and the _FormsModule_ into your new component:
+   <details>
+     <summary>Show source</summary>
+     <p>
+
+   ```typescript
+   @Component({
+     standalone: true,
+     imports: [CommonModule, FormsModule],
+     selector: 'app-flight-search',
+     templateUrl: './flight-search.component.html',
+     styleUrl: './flight-search.component.css',
+   })
+   export class FlightSearchComponent {}
+   ```
+
+     </p>
+   </details>
+
+9. Add another section to your template that lists the found flights in a table. Again you can use this HTML fragment, but you have to add the **data binding**:
 
    ```html
    <div class="card">
@@ -224,7 +243,7 @@ In this first part of the exercise you will implement the _FlightSearchComponent
            <td>{{ flight.from }}</td>
            <td>{{ flight.to }}</td>
            <td>{{ flight.date | date:'dd.MM.yyyy HH:mm' }}</td>
-           <td><a (click)="select(f)">Select</a></td>
+           <td><a (click)="select(flight)">Select</a></td>
          </tr>
          }
        </tbody>
@@ -236,41 +255,15 @@ In this first part of the exercise you will implement the _FlightSearchComponent
     </p>
     </details>
 
-9. Add a third section to your template. It should present the selected flight:
+10. Add a third section to your template. It should present the selected flight:
 
-   ```html
-   <div class="card">
-     <div class="content">
-       <pre>{{ selectedFlight | json }}</pre>
-     </div>
-   </div>
-   ```
-
-10. Open the file _app.module.ts_ make sure, that the new _FlightSearchComponent_ is registered in _declarations_.
-
-     <details>
-     <summary>Show source</summary>
-     <p>
-
-    ```typescript
-    @NgModule({
-      imports: [
-        BrowserModule,
-        FormsModule,
-        HttpClientModule
-      ],
-      declarations: [
-        AppComponent,
-        FlightSearchComponent,
-        […] // keep the rest here
-      ],
-      bootstrap: [AppComponent]
-    })
-    export class AppModule { }
-    ```
-
-     </p>
-     </details>
+```html
+<div class="card">
+  <div class="content">
+    <pre>{{ selectedFlight | json }}</pre>
+  </div>
+</div>
+```
 
 11. Switch to the file _app.component.html_, to call the new component:
 
@@ -302,7 +295,9 @@ In this first part of the exercise you will implement the _FlightSearchComponent
 
 ### Bonus: Edit flights \*
 
-Create a possibility to edit the selected flight. Therefore you'll show a form after the selection.
+Create a possibility to edit the selected flight. Therefore, you'll show a form after the selection.
+
+Note that you cannot edit the data records with IDs 1 to 5 so that these data records are available in every demo. You can assign ID 0 to create a new flight. After saving on the server, this will be replaced by the next free ID.
 
 Follow these steps:
 
@@ -396,29 +391,27 @@ Follow these steps:
 
    ```html
    @if (selectedFlight) {
-   <div>
-     <div>{{ message }}</div>
+   <div>{{ message }}</div>
 
-     <div class="form-group">
-       <label>Id</label>
-       <input class="form-control" [(ngModel)]="selectedFlight.id" />
-     </div>
-
-     <div class="form-group">
-       <label>From</label>
-       <input class="form-control" [(ngModel)]="selectedFlight.from" />
-     </div>
-
-     <!-- add fields for other attributes -->
-
-     […]
-
-     <button type="submit" class="btn btn-default" (click)="save()">Save</button>
+   <div class="form-group">
+     <label>Id</label>
+     <input class="form-control" [(ngModel)]="selectedFlight.id" />
    </div>
+
+   <div class="form-group">
+     <label>From</label>
+     <input class="form-control" [(ngModel)]="selectedFlight.from" />
+   </div>
+
+   <!-- add fields for other attributes -->
+
+   […]
+
+   <button type="submit" class="btn btn-default" (click)="save()">Save</button>
    }
    ```
 
    </p>
    </details>
 
-4. Run the application and test it. Note that you cannot edit the data records with IDs 1 to 5 so that these data records are available in every demo. You can assign ID 0 to create a new flight. After saving on the server, this will be replaced by the next free ID.
+4. Run the application and test it.

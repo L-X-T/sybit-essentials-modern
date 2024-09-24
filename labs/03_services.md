@@ -44,24 +44,6 @@ To do this, you can follow the points below or just look up if necessary.
     </p>
     </details>
 
-   In case you did bonus task _Edit flights_ above, you must now also outsource the _save_ method to the service.
-
-    <details>
-    <summary>Show source</summary>
-    <p>
-
-   ```typescript
-   save(flight: Flight): Observable<Flight> {
-     const url = 'http://www.angular.at/api/flight';
-     const headers = new HttpHeaders().set('Accept', 'application/json');
-
-     return this.http.post<Flight>(url, flight, { headers });
-   }
-   ```
-
-    </p>
-    </details>
-
 3. Open the _flight-search.component.ts_ file and inject the new service into the service. Make sure the corresponding import was added!
 
    <details>
@@ -107,140 +89,31 @@ To do this, you can follow the points below or just look up if necessary.
 
 6. Make sure with the DevTools debugger that the _FlightService_ gets the _HttpClient_ injected first and then the component gets the _FlightService_ in the same way.
 
-7. If you did the edit flights bonus task use the flight service for saving the flight as well.
+### Bonus: Save method \*
 
-### Bonus: Alternate Implementation \*
+In case you did bonus task _Bonus: Edit flights_ above, you must now also outsource the _save_ method to the service.
 
-1. Create a new file with an `AbstractFlightService` in the _flight-search_ folder:
-
-   ```typescript
-   export abstract class AbstractFlightService {
-     abstract find(from: string, to: string): Observable<Flight[]>;
-   }
-   ```
-
-2. Switch to the _flight.service.ts_ file and let _FlightService_ implement the _AbstractFlightService_ class:
-
-   ```typescript
-   @Injectable({ [...] })
-   export class FlightService implements AbstractFlightService {
-     […]
-   }
-   ```
-
-   The keyword _implements_ indicates that the _FlightService_ must implement all methods of the _AbstractFlightServices_. In contrast to the keyword _extends_, however, there is no inheritance.
-
-3. Switch to the app.module.ts file and create a provider for the AbstractFlightService:
-
-   ```typescript
-   @NgModule({
-     [...],
-     providers: [
-       {
-         provide: AbstractFlightService,
-         useClass: FlightService
-       }
-     ],
-     [...]
-   })
-   export class AppModule { }
-   ```
-
-4. Request an instance of _AbstractFlightService_ **instead** of an instance of _FlightService_ in your component via dependency injection:
-
-   <details>
-   <summary>Show source</summary>
-   <p>
-
-   ```typescript
-   private readonly flightService = inject(AbstractFlightService);
-   ```
-
-   </p>
-   </details>
-
-   <br>
-
-5. Test your solution.
-
-6. Create a _dummy-flight.service.ts_ file in the _flight-search_ folder.
-
-7. Provide an alternative implementation of _AbstractFlightService_ in this file. This should be called _DummyFlightService_ and return a few hard-coded flights for testing:
-
-   ```typescript
-   import { of } from 'rxjs';
-   […]
-
-   @Injectable()
-   export class DummyFlightService implements AbstractFlightService {
-     find(from: string, to: string): Observable<Flight[]> {
-       return of([{id: 17, from: 'Graz', to: 'Hamburg', date: '2022-01-01', delayed: true}]);
-     }
-   }
-   ```
-
-   The _of_ function shown here creates an observable that returns the transferred array with flights.
-
-8. Now let your `AbstractFlightService` refer to the new ` DummyFlightService`.
-
-   <details>
-   <summary>Show source</summary>
-   <p>
-
-   ```typescript
-   @NgModule({
-     [...],
-     providers: [
-       {
-         provide: AbstractFlightService,
-         useClass: DummyFlightService
-       }
-     ],
-     [...]
-   })
-   export class AppModule { }
-   ```
-
-   </p>
-   </details>
-
-   <br>
-
-9. Test your solution and make sure that the new _DummyFlightService_ is used.
-
-10. Change the service registration again so that you can send the original _FlightService_ to all consumers who request the _AbstractFlightService_:
-
-    ```typescript
-    @NgModule({
-      [...],
-      providers: [
-        {
-          provide: AbstractFlightService,
-          useClass: FlightService
-        }
-      ],
-      [...]
-    })
-    export class AppModule { }
-    ```
-
-### Bonus: useFactory \*\*
-
-With `useFactory` you can specify a factory function that specifies how your service is to be created
+<details>
+<summary>Show source</summary>
+<p>
 
 ```typescript
-@NgModule({
-  [...],
-  providers: [
-    {
-      provide: AbstractFlightService,
-      useFactory: (http: HttpClient) => new FlightService(http),
-      deps: [HttpClient]
-    }
-  ],
-  [...]
-})
-export class AppModule { }
+save(flight: Flight): Observable<Flight> {
+ const url = 'http://www.angular.at/api/flight';
+ const headers = new HttpHeaders().set('Accept', 'application/json');
+
+ return this.http.post<Flight>(url, flight, { headers });
+}
 ```
 
-Create a constant `DEBUG` in this file, which can be either `true` or `false`. Change the factory so that, depending on ` DEBUG`, it returns either the `FlightService` (` DEBUG === false`) or the `DummyFlightService` (`DEBUG === true`).
+</p>
+</details>
+
+### Bonus: (Re-)Use service class members \*
+
+Create a class member for the URL and the headers and use them in both methods:
+
+```typescript
+private readonly headers = new HttpHeaders().set('Accept', 'application/json');
+private readonly url = 'http://www.angular.at/api/flight';
+```
