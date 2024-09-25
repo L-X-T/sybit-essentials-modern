@@ -20,6 +20,14 @@ To do this, you can follow the points below or just look up if necessary.
 
 1. Create a service in the _flight-search_ folder. The file for this service should be named _flight.service.ts_.
 
+   You may want to use the generator in your terminal (or your IDE):
+
+   ```
+   ng g s flight-search/flight --dry-run
+   ```
+
+   Hint: Remove `--dry-run` to really create the service.
+
 2. Implement a _FlightService_ in that file, which requests the flights required by the application. The service must have the _HttpClient_ injected (and imported) to do its job.
 
     <details>
@@ -114,6 +122,6 @@ save(flight: Flight): Observable<Flight> {
 Create a class member for the URL and the headers and use them in both methods:
 
 ```typescript
-private readonly headers = new HttpHeaders().set('Accept', 'application/json');
 private readonly url = 'http://www.angular.at/api/flight';
+private readonly headers = new HttpHeaders().set('Accept', 'application/json');
 ```

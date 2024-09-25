@@ -9,7 +9,7 @@
     - [1. Unsubscribe with Subscription](#1-unsubscribe-with-subscription)
     - [2. Unsubscribe with takeUntil Subject](#2-unsubscribe-with-takeuntil-subject)
     - [3. Using the async pipe](#3-using-the-async-pipe)
-  - [Bonus: Use takeUntilDestroyed Pipe \*](#bonus-use-takeuntildestroyed-pipe-)
+  - [Use takeUntilDestroyed Pipe \*](#bonus-use-takeuntildestroyed-pipe-)
   - [Bonus: Share Hot Observable \*](#bonus-share-hot-observable-)
   - [Bonus: Add delays and show a loading state \*\*](#bonus-add-delays-and-show-a-loading-state-)
   - [Bonus: Add basic Error Handling \*\*\*](#bonus-add-basic-error-handling-)
@@ -23,13 +23,7 @@ Please note that the returned data is just an array with strings. For data acces
 
 You can follow these steps:
 
-1. Start by creating your new `AirportsComponent` in your project's root.
-
-   **Hint**: To generate the files needed, run the following command (or it's shorthand) in your project's root:
-
-   ```
-   ng generate component airports
-   ```
+1. Start by creating your new `AirportsComponent` in your project's root. To generate the files needed, run the following command (or use your IDE):
 
    ```
    ng g c airports
@@ -48,7 +42,7 @@ You can follow these steps:
    <p>
 
    ```typescript
-   import { Component, inject, OnInit } from '@angular/core';
+   import { Component, inject } from '@angular/core';
 
    import { AirportService } from './airport.service';
 
@@ -56,12 +50,12 @@ You can follow these steps:
      selector: 'app-airports',
      templateUrl: './airports.component.html',
    })
-   export class AirportsComponent implements OnInit {
+   export class AirportsComponent {
      airports: string[] = [];
 
      private readonly airportService = inject(AirportService);
 
-     ngOnInit(): void {
+     constructor() {
        this.airportService.findAll().subscribe((airports) => {
          this.airports = airports;
        });
@@ -85,7 +79,7 @@ You can follow these steps:
      <div class="content">
        <div class="row">
          @for (airport of airports; track airport) {
-           <div class="col-lg-3">{{ airport }}</div>
+         <div class="col-lg-3">{{ airport }}</div>
          }
        </div>
      </div>
@@ -100,10 +94,6 @@ You can follow these steps:
    An example of the JSON-based answer can be found here: http://www.angular.at/help. While the XML response uses Pascal-Case (eg ` From`), the JSON response uses the usual Camel case (eg ` from`). Thus, the practices of the two standards are taken into account.
 
 4. In your project, create a `airports/airport.service.ts` file with a `AirportService` class:
-
-   ```
-   ng generate service airports/airport
-   ```
 
    ```
    ng g s airports/airport
@@ -165,14 +155,14 @@ Now we want to explicitly declare the `Observable` and the `Observer`. Add two m
   airportsObserver?: Observer<string[]>;
 ```
 
-Make sure you've added the import of `Observable` and `Observer` from `rxjs`. In your `ngOnInit` component lifecylce hook assign the `Observable` you get from the service to the component member in a first step. Then create an `Observer` as a second step. You can, if you want, add a (dummy) error handling and a complete function to your `Observer`. Finally subscribe to the `Observable` with the created `Observer`.
+Make sure you've added the import of `Observable` and `Observer` from `rxjs`. In your component `constructor` assign the `Observable` you get from the service to the component member in a first step. Then create an `Observer` as a second step. You can, if you want, add a (dummy) error handling and a complete function to your `Observer`. Finally subscribe to the `Observable` with the created `Observer`.
 
 <details>
 <summary>Show code</summary>
 <p>
 
 ```typescript
-  ngOnInit(): void {
+  constructor() {
     this.airports$ = this.airportService.findAll();
 
     this.airportsObserver = {
@@ -190,7 +180,7 @@ Make sure you've added the import of `Observable` and `Observer` from `rxjs`. In
 
 Test your solution to see if everything still works.
 
-## Closing the Observable
+## Subscription Management
 
 In this part we'll try out the three recommended best practices of how to unsubscribe from our `Observable`.
 
@@ -205,10 +195,10 @@ We'll add the subscription as a member first:
   airportsSubscription?: Subscription;
 ```
 
-Make sure you've added the import of `Subscription` from `rxjs`. Now we just need to assign the subscription in `ngOnInit` and then unsubscribe in `ngOnDestroy`. Since we're using `ngOnDestroy` we also need to add it's interface `OnDestroy` to the component:
+Make sure you've added the import of `Subscription` from `rxjs`. Now we just need to assign the subscription in the `constructor` and then unsubscribe in `ngOnDestroy`. Since we're using `ngOnDestroy` we also need to add it's interface `OnDestroy` to the component:
 
 ```typescript
-export class AirportComponent implements OnInit, OnDestroy {
+export class AirportComponent implements OnDestroy {
   [...]
 }
 ```
@@ -220,7 +210,7 @@ export class AirportComponent implements OnInit, OnDestroy {
 <p>
 
 ```typescript
-  ngOnInit(): void {
+  constructor() {
     [...]
 
     this.airportsSubscription = this.airports$.subscribe(this.airportsObserver);
@@ -269,14 +259,10 @@ Make sure you've added the import of `Subject` from `rxjs`. Now let's jump to th
 Now we can use our `Subject` when subscribing to the `Observable`. As already mentioned we duplicate the subscribe block here and use the newly added member `takeUntilAirports`.
 
 ```typescript
-  ngOnInit(): void {
+  constructor() {
     [...]
 
-    this.airports$.pipe(takeUntil(this.onDestroySubject)).subscribe({
-      next: (airports) => (this.takeUntilAirports = airports),
-      error: (err) => console.error(err),
-      complete: () => console.log('Take until Observable completed!')
-    });
+    this.airports$.pipe(takeUntil(this.onDestroySubject)).subscribe(this.airportsObserver);
   }
 ```
 
@@ -295,7 +281,7 @@ Import `takeUntil` from `rxjs/operators`. Now let's show this airports in anothe
   <div class="content">
     <div class="row">
       @for (airport of takeUntilAirports; track airport) {
-        <div class="col-lg-3">{{ airport }}</div>
+      <div class="col-lg-3">{{ airport }}</div>
       }
     </div>
   </div>
@@ -324,7 +310,7 @@ In the third and last approach we'll use the Angular `async` Pipe. We don't need
   <div class="content">
     <div class="row">
       @for (airport of airports; track airport) {
-        <div class="col-lg-3">{{ airport }}</div>
+      <div class="col-lg-3">{{ airport }}</div>
       }
     </div>
   </div>
@@ -338,7 +324,7 @@ Now all we need to do is replace the `airports` with our `Observable` and then a
 
 ```html
 @for (airport of airports$ | async; track airport) {
-  <div class="col-lg-3">{{ airport }}</div>
+<div class="col-lg-3">{{ airport }}</div>
 }
 ```
 
@@ -346,13 +332,21 @@ Test your solution.
 
 Now Angular takes care of subscribing and unsubscribing of its own. That was quite easy, huh? That's why the Angular `async` Pipe was invented: To make our live easier. But there will be cases when you will need to subscribe and unsubscribe yourself.
 
-## Bonus: Use takeUntilDestroyed Pipe \*
+## Use takeUntilDestroyed Pipe \*\*
 
 Instead of the approach with the `takeUntil` pipe and the `Subject` try using Angular 16's `takeUntilDestroyed` pipe.
 
+```typescript
+  constructor() {
+    [...]
+
+    this.airports$.pipe(takeUntilDestroyed()).subscribe(this.airportsObserver);
+  }
+```
+
 ## Bonus: Share Hot Observable \*
 
-Open the chrome dev tools and notice that we do the API call three times: Once for every subscription. Try sharing the same observable for the three variants by creating a Hot Observable. You can use `share()` operator to achieve this.
+Open the Chrome dev tools and notice that we do the API call three times: Once for every subscription. Try sharing the same observable for the three variants by creating a Hot Observable. You can use `share()` operator to achieve this.
 
 ```typescript
 this.airports$ = this.airportService.findAll().pipe(share());
@@ -377,13 +371,10 @@ Import `delay` from `rxjs/operators`. Now add a flag that shows a loading indica
 ```html
 <div class="content">
   <div class="row">
-    @let asyncAirports = airports$ | async;
-    @if (asyncAirports) {
-      @for (airport of asyncAirports; track airport) {
-        <div class="col-lg-3">{{ airport }}</div>
-      }
-    } @else {
-      <div class="col-lg-3">...isLoadingAirports...</div>
+    @let asyncAirports = airports$ | async; @if (asyncAirports) { @for (airport of asyncAirports; track airport) {
+    <div class="col-lg-3">{{ airport }}</div>
+    } } @else {
+    <div class="col-lg-3">...isLoadingAirports...</div>
     }
   </div>
 </div>

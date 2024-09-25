@@ -101,7 +101,7 @@ In this part, you will take a closer look at the starter kit to familiarize your
 
 2. Note that the `app.component.html` has an element `<router-outlet></router-outlet>`. This is the placeholder for the router.
 
-3. Look at the module in the `app.module.ts` file.
+3. Look at the config in the `app.config.ts` file.
 
 4. Look at the `index.html` file.
 

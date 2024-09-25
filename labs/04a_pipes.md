@@ -10,9 +10,17 @@
 
 ## Create your own pipe
 
-1. In the _src/app_ folder, create the sub-folders _shared / pipes_.
+1. In the _src/app_ folder, create the sub-folders _shared/pipes_. In this folder, create a new file _city.pipe.ts_ with a _CityPipe_.
 
-2. In this folder, create a new file _city.pipe.ts_ with a _CityPipe_. This pipe should transfrom the city names such as ` Graz` or `Hamburg` depending on a transferred parameter either on airport codes such as `GRZ` or ` HAM` or on long names such as `Flughafen Graz Thalerhof` or ` Airport Hamburg Helmut Schmidt`.
+   You may want to use the generator in your terminal (or your IDE):
+
+   ```
+   ng g p shared/pipes/city --dry-run
+   ```
+
+   Hint: Remove `--dry-run` to really create the pipe.
+
+2. This pipe should transfrom the city names such as ` Graz` or `Hamburg` depending on a transferred parameter either on airport codes such as `GRZ` or ` HAM` or on long names such as `Flughafen Graz Thalerhof` or ` Airport Hamburg Helmut Schmidt`.
 
    <details>
    <summary>Show source</summary>
@@ -22,6 +30,7 @@
    import { Pipe, PipeTransform } from '@angular/core';
 
    @Pipe({
+     standalone: true,
      name: 'city',
      pure: true, // actually not necessary since it's the default
    })
@@ -58,31 +67,23 @@
    </p>
    </details>
 
-3. Open the _app.module.ts_ file and make sure the new pipe has been registered.
-
+3. Make sure to import the _CityPipe_ into your component:
    <details>
-   <summary>Show source</summary>
-   <p>
+     <summary>Show source</summary>
+     <p>
 
    ```typescript
-   @NgModule({
-     imports: [
-       BrowserModule,
-       FormsModule,
-       HttpClientModule
-     ],
-     declarations: [
-       [...],
-       AppComponent,
-       FlightSearchComponent,
-       CityPipe // <-- this line should be here!
-     ],
-     bootstrap: [AppComponent]
+   @Component({
+     standalone: true,
+     imports: [CommonModule, FormsModule, CityPipe],
+     selector: 'app-flight-search',
+     templateUrl: './flight-search.component.html',
+     styleUrl: './flight-search.component.css',
    })
-   export class AppModule { }
+   export class FlightSearchComponent {}
    ```
 
-   </p>
+     </p>
    </details>
 
 4. Open the file _flight-search.component.html_ and use the _CityPipe_ to format the cities of the flights found.
@@ -112,7 +113,7 @@
            <td>{{ flight.from | city:'short' }}</td>
            <td>{{ flight.to | city:'long' }}</td>
            <td>{{ flight.date | date:'dd.MM.yyyy HH:mm' }}</td>
-           <td><a (click)="select(f)">Select</a></td>
+           <td><a (click)="select(flight)">Select</a></td>
          </tr>
          }
        </tbody>
