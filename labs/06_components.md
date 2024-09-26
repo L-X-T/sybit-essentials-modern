@@ -12,7 +12,7 @@ In this exercise you will first create the FlightCardComponent shown. Then you w
 
 ### FlightCardComponent
 
-1. Create a new component `flight-card` in the folder of the module `flight-booking`, which consists of a sub-folder `flight-card` with the following files:
+1. Create a new component `flight-card` in the folder `flight-booking`, which consists of a sub-folder `flight-card` with the following files:
 
 - `flight-card.component.html`
 - `flight-card.component.ts`
@@ -65,7 +65,7 @@ In this exercise you will first create the FlightCardComponent shown. Then you w
    </div>
    ```
 
-   Note the data binding expressions in this template.
+   Note the data binding expressions in this template. Also, make sure to import either the `DatePipe` or the `CommonModule` (which includes the `DatePipe`) into your `FlightCard` (by adding it to the component's imports array).
 
 4. Open the file _flight-search.component.ts_ and add the one property _basket_:
 
@@ -106,7 +106,7 @@ In this exercise you will first create the FlightCardComponent shown. Then you w
    </p>
    </details>
 
-7. Make sure that the new _FlightCardComponent_ is imported into the _FlightSearchComponent_.
+7. Make sure that the new `FlightCardComponent` is imported into the `FlightSearchComponent`.
 
 8. At the end of the template, also update the shopping cart so that the new property `basket` is output here instead of `selectedFlight`.
 
@@ -127,7 +127,7 @@ In this exercise you will first create the FlightCardComponent shown. Then you w
 
 9. Test your solution.
 
-10. When calling the _FlightCardComponent_, use a two-way binding using the "Banana-in-a-Box syntax" instead of the bindings for _selected_ and _selectedChanged_.
+10. When calling the `FlightCardComponent`, use a two-way binding using the "Banana-in-a-Box syntax" instead of the bindings for _selected_ and _selectedChanged_.
 
     <details>
     <summary>Show source</summary>
@@ -158,7 +158,7 @@ Create a _StatusToggleComponent_ that receives the delayed flag of a flight via 
 
 ### Bonus: Content Projection \*\*
 
-In this bonus exercise you create the possibility of expanding the display of the _FlightCardComponent_ by transferring additional HTML to be displayed when it is called.
+In this bonus exercise you create the possibility of expanding the display of the `FlightCardComponent` by transferring additional HTML to be displayed when it is called.
 
 1. Open the file flight-search.component.html and transfer additional HTML to the*FlightCardComponent*:
 

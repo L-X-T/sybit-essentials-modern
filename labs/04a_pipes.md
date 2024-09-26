@@ -10,7 +10,7 @@
 
 ## Create your own pipe
 
-1. In the _src/app_ folder, create the sub-folders _shared/pipes_. In this folder, create a new file _city.pipe.ts_ with a _CityPipe_.
+1. In the _src/app_ folder, create the sub-folders _shared/pipes_. In this folder, create a new file _city.pipe.ts_ with a `CityPipe`.
 
    You may want to use the generator in your terminal (or your IDE):
 
@@ -67,7 +67,7 @@
    </p>
    </details>
 
-3. Make sure to import the _CityPipe_ into your component:
+3. Make sure to import the `CityPipe` into your component:
    <details>
      <summary>Show source</summary>
      <p>
@@ -86,7 +86,7 @@
      </p>
    </details>
 
-4. Open the file _flight-search.component.html_ and use the _CityPipe_ to format the cities of the flights found.
+4. Open the file _flight-search.component.html_ and use the `CityPipe` to format the cities of the flights found.
 
    <details>
    <summary>Show source</summary>
@@ -131,7 +131,7 @@
 
 ### Bonus: StatusColorPipe \*
 
-Create a _StatusColorPipe_, which maps the property _delayed_ of the flight (true or false) to a color. Use this pipe together with the _ngStyle_ directive to assign this color to the CSS property _color_ of the output status:
+Create a `StatusColorPipe`, which maps the property _delayed_ of the flight (true or false) to a color. Use this pipe together with the _ngStyle_ directive to assign this color to the CSS property _color_ of the output status:
 
 ```html
 <td [style.color]="flight.delayed | statusColor">{{ flight.date | date:'dd.MM.yyyy HH:mm'}}</td>
@@ -175,7 +175,7 @@ Under the following urls you will find two services that provide the official sh
 
 Expand your airport service with methods that return the long or short name of an airport as `Observable<String>`.
 
-Write a new `AsyncCityPipe` that injects this service. The `transform` method should delegate to the service and return the desired result in the form of the received as _Observable&lt;string&gt;_. In order for Angular to be able to resolve this observable, the async pipe must also be used in the template:
+Write a new `AsyncCityPipe` that injects this service. The `transform` method should delegate to the service and return the desired result in the form of the received as `Observable<string>`. In order for Angular to be able to resolve this observable, the async pipe must also be used in the template:
 
 ```html
 [...] {{ flight.from | asyncCity:'short' | async }} [...]

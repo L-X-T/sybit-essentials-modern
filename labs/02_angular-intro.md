@@ -10,7 +10,7 @@
 
 ### Component for searching for flights
 
-In this first part of the exercise you will implement the _FlightSearchComponent_. You can follow these tutorial steps or do it your own way and just look up here for reference:
+In this first part of the exercise you will implement the `FlightSearchComponent`. You can follow these tutorial steps or do it your own way and just look up here for reference:
 
 1. Create a folder _entities_ in your _src/app_ folder.
 
@@ -26,7 +26,7 @@ In this first part of the exercise you will implement the _FlightSearchComponent
    };
    ```
 
-3. In the folder _src/app_ create a _FlightSearchComponent_
+3. In the folder _src/app_ create a `FlightSearchComponent`
 
    **Important:** There are several ways to generate a component:
 
@@ -51,7 +51,7 @@ In this first part of the exercise you will implement the _FlightSearchComponent
    ng g c --help
    ```
 
-4. Add the following members to your class _FlightSearchComponent_:
+4. Add the following members to your class `FlightSearchComponent`:
 
    ```typescript
    @Component({
@@ -169,7 +169,7 @@ In this first part of the exercise you will implement the _FlightSearchComponent
    </p>
    </details>
 
-8. Make sure to import the _CommonModule_ and the _FormsModule_ into your new component:
+8. Make sure to import the `CommonModule` and the `FormsModule` into your new component:
    <details>
      <summary>Show source</summary>
      <p>

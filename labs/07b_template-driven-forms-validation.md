@@ -89,16 +89,14 @@ You can use the following procedure as a guide:
 
    <!-- better add this to your Validation Errors component -->
    @if (flightSearchForm.controls['from']?.errors['city']) {
-     <div class="text-danger">... city error msg ...</div>
-   }
-
-   [...]
+   <div class="text-danger">... city error msg ...</div>
+   } [...]
    ```
 
    </p>
    </details>
 
-6. Make sure that the new directive is imported into the _FlightSearchComponent_.
+6. Make sure that the new directive is imported into the `FlightSearchComponent`.
 
 7. Test your solution.
 
@@ -244,15 +242,22 @@ You can use the following procedure as a guide:
    <p>
 
    ```html
-   <input [...] name="from" [(ngModel)]="from" required minlength="3" maxlength="15" pattern="[a-zA-ZäöüÄÖÜß ]*" asyncCity />
+   <input
+     [...]
+     name="from"
+     [(ngModel)]="from"
+     required
+     minlength="3"
+     maxlength="15"
+     pattern="[a-zA-ZäöüÄÖÜß ]*"
+     asyncCity
+   />
    [...]
-   
+
    <!-- better add this to your Validation Errors component -->
    @if (flightSearchForm.controls['from']?.errors['asyncCity']) {
-     <div class="text-danger">... asyncCity error msg ...</div>
-   }
-
-   [...]
+   <div class="text-danger">... asyncCity error msg ...</div>
+   } [...]
    ```
 
    </p>
@@ -265,21 +270,17 @@ You can use the following procedure as a guide:
    <p>
 
    ```html
-   [...]
-   
-   @if (flightSearchForm.controls['from']?.pending) {
-     <div class="text-danger">Executing Async Validator</div>
-   }
-
-   [...]
+   [...] @if (flightSearchForm.controls['from']?.pending) {
+   <div class="text-danger">Executing Async Validator</div>
+   } [...]
    ```
 
    </p>
    </details>
 
-8. Make sure that the new directive is imported into the _FlightSearchComponent_.
+7. Make sure that the new directive is imported into the `FlightSearchComponent`.
 
-9. Test your solution. **Please note** that Angular only runs asynchronous validators if none of the synchronous validators reports an error. For example, enter `Rom` in the whitelist of the synchronous validator. If you now search for `Rom`, all synchronous validators will validate this value correctly and the new asynchronous validator will return an error because `Rom` is not entered in the database.
+8. Test your solution. **Please note** that Angular only runs asynchronous validators if none of the synchronous validators reports an error. For example, enter `Rom` in the whitelist of the synchronous validator. If you now search for `Rom`, all synchronous validators will validate this value correctly and the new asynchronous validator will return an error because `Rom` is not entered in the database.
 
 ## Bonus: Multifield Validator \*
 
@@ -330,13 +331,9 @@ After **importing** the validation directive in the `FlightSearchComponent`, it 
 
 ```html
 <form #flightSearchForm="ngForm" roundTrip>
-  [...]
-
-  @if (flightSearchForm.errors['roundTrip']) {
-    <div class="text-danger">Executing Async Validator</div>
-  }
-
-  [...]
+  [...] @if (flightSearchForm.errors['roundTrip']) {
+  <div class="text-danger">Executing Async Validator</div>
+  } [...]
 </form>
 ```
 

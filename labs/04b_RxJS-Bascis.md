@@ -155,7 +155,7 @@ Now we want to explicitly declare the `Observable` and the `Observer`. Add two m
   airportsObserver?: Observer<string[]>;
 ```
 
-Make sure you've added the import of `Observable` and `Observer` from `rxjs`. In your component `constructor` assign the `Observable` you get from the service to the component member in a first step. Then create an `Observer` as a second step. You can, if you want, add a (dummy) error handling and a complete function to your `Observer`. Finally subscribe to the `Observable` with the created `Observer`.
+Make sure you've added the import of `Observable` and `Observer` from `RxJS`. In your component `constructor` assign the `Observable` you get from the service to the component member in a first step. Then create an `Observer` as a second step. You can, if you want, add a (dummy) error handling and a complete function to your `Observer`. Finally subscribe to the `Observable` with the created `Observer`.
 
 <details>
 <summary>Show code</summary>
@@ -195,7 +195,7 @@ We'll add the subscription as a member first:
   airportsSubscription?: Subscription;
 ```
 
-Make sure you've added the import of `Subscription` from `rxjs`. Now we just need to assign the subscription in the `constructor` and then unsubscribe in `ngOnDestroy`. Since we're using `ngOnDestroy` we also need to add it's interface `OnDestroy` to the component:
+Make sure you've added the import of `Subscription` from `RxJS`. Now we just need to assign the subscription in the `constructor` and then unsubscribe in `ngOnDestroy`. Since we're using `ngOnDestroy` we also need to add it's interface `OnDestroy` to the component:
 
 ```typescript
 export class AirportComponent implements OnDestroy {
@@ -238,7 +238,7 @@ First let's add a `Subject` to the component members:
   onDestroySubject = new Subject<void>();
 ```
 
-Make sure you've added the import of `Subject` from `rxjs`. Now let's jump to the `ngOnDestroy` hook and create an emit for this `Subject` and close it afterwards.
+Make sure you've added the import of `Subject` from `RxJS`. Now let's jump to the `ngOnDestroy` hook and create an emit for this `Subject` and close it afterwards.
 
 <details>
 <summary>Show code</summary>

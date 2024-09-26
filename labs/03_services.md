@@ -28,7 +28,7 @@ To do this, you can follow the points below or just look up if necessary.
 
    Hint: Remove `--dry-run` to really create the service.
 
-2. Implement a _FlightService_ in that file, which requests the flights required by the application. The service must have the _HttpClient_ injected (and imported) to do its job.
+2. Implement a `FlightService` in that file, which requests the flights required by the application. The service must have the `HttpClient` injected (and imported) to do its job.
 
     <details>
     <summary>Show source</summary>
@@ -70,7 +70,7 @@ To do this, you can follow the points below or just look up if necessary.
    </p>
    </details>
 
-4. Use the injected _FlightService_ in the _search_ method to search for flights.
+4. Use the injected `FlightService` in the _search_ method to search for flights.
 
    <details>
    <summary>Show source</summary>
@@ -95,7 +95,7 @@ To do this, you can follow the points below or just look up if necessary.
 
 5. Test your solution in the browser.
 
-6. Make sure with the DevTools debugger that the _FlightService_ gets the _HttpClient_ injected first and then the component gets the _FlightService_ in the same way.
+6. Make sure with the DevTools debugger that the `FlightService` gets the `HttpClient` injected first and then the component gets the `FlightService` in the same way.
 
 ### Bonus: Save method \*
 
