@@ -30,7 +30,7 @@ You can use the following procedure as a guide:
 
    ```typescript
    @Directive({
-     // eslint-disable-next-line @angular-eslint/directive-selector
+     standalone: true,
      selector: 'input[city]',
      providers: [{
        provide: NG_VALIDATORS,
@@ -121,14 +121,14 @@ You can follow the following procedure:
      [...]
    })
    export class CityValidatorDirective implements Validator {
-     @Input({ required: true }) city: string[] = [];
+     city = input.required<string[]>();
 
      validate(c: AbstractControl): ValidationErrors | null {
-       if (c.value && !this.city.includes(c.value)) {
+       if (c.value && !this.city().includes(c.value)) {
          return {
            city: {
              actualCity: c.value,
-             validCities: this.city.join(', ')
+             validCities: this.city().join(', ')
            }
          }
        }
@@ -167,7 +167,7 @@ You can use the following procedure as a guide:
 
    ```typescript
    @Directive({
-     // eslint-disable-next-line @angular-eslint/directive-selector
+     standalone: true,
      selector: 'input[asyncCity]',
      providers: [{
        provide: NG_ASYNC_VALIDATORS,
@@ -218,7 +218,7 @@ You can use the following procedure as a guide:
    [...]
 
    @Directive({
-   ...
+     [...]
    })
    export class AsyncCityValidatorDirective implements AsyncValidator {
      private readonly flightService = inject(FlightService);
@@ -290,6 +290,7 @@ To do this, the selector must address the entire form:
 
 ```typescript
 @Directive({
+  standalone: true,
   selector: 'form[roundTrip]',
   providers: [...]
 })

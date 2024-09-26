@@ -37,19 +37,22 @@ You can use the following procedure as a guide:
    <p>
 
    ```html
-   <input [...] name="from" [(ngModel)]="from" [...] required minlength="3" maxlength="15" pattern="[a-zA-ZäöüÄÖÜß ]+" />
+   <input
+     [...]
+     name="from"
+     [(ngModel)]="from"
+     [...]
+     required
+     minlength="3"
+     maxlength="15"
+     pattern="[a-zA-ZäöüÄÖÜß ]+"
+   />
 
    @if (flightSearchForm.controls['from']) {
-     <pre>{{ flightSearchForm.controls['from'].errors | json }}</pre>
-   }
-
-   [...]
-   
-   @if (flightSearchForm.controls['from']?.errors['minlength']) {
-     <div class="text-danger">... minlength ...</div>
-   }
-   
-   [...]
+   <pre>{{ flightSearchForm.controls['from'].errors | json }}</pre>
+   } [...] @if (flightSearchForm.controls['from']?.errors['minlength']) {
+   <div class="text-danger">... minlength ...</div>
+   } [...]
    ```
 
    </p>
@@ -79,23 +82,29 @@ ng g c flight-booking/flight-validation-errors
 }
 ```
 
-3. Implement the component, so that it receives this `errors` object (`@Input({ required: true }) errors: ValidationErrors | null = null;`) and outputs an error message for each of the errors in it. Please note that `null` is used internally when there are no errors. To check whether this object exists and whether it indicates a specific error, `@if` can be used:
+3. Implement the component, so that it receives this `errors` object (`@Input({ required: true }) errors: ValidationErrors;` or if you prefer to use a **signal** `errors = input.required<ValidationErrors>();`) and outputs an error message for each of the errors in it. Please note that `null`is used internally when there are no errors. To check whether this object exists and whether it indicates a specific error,`@if` can be used:
 
 ```html
-@if (errors) {
-  @if (errors['required']) {
-    <div class="alert alert-danger" role="alert">This field is required.</div>
-  }
-  
-  @if (errors['minlength']) {
-    <div class="alert alert-danger" role="alert">This field is too short.</div>
-  }
-  
-  <!--[...]-->
+<!--classic inputs-->
+@if (errors['required']) {
+<div class="alert alert-danger" role="alert">This field is required.</div>
+} @if (errors['minlength']) {
+<div class="alert alert-danger" role="alert">This field is too short.</div>
 }
+<!--[...]-->
 ```
 
-4. To make this component reusable for different fields, you might want to add another input for the field name like (`@Input() fieldLabel = 'Field';`). Now you can also use the same component for the `to` field and also later for Reactive Forms.
+```html
+<!--signal inputs-->
+@if (errors()['required']) {
+<div class="alert alert-danger" role="alert">This field is required.</div>
+} @if (errors()['minlength']) {
+<div class="alert alert-danger" role="alert">This field is too short.</div>
+}
+<!--[...]-->
+```
+
+4. To make this component reusable for different fields, you might want to add another input for the field name like (`@Input() fieldLabel = 'Field';` or if you prefer to use a **signal** `fieldLabel = input('Field');`). Now you can also use the same component for the `to` field and also later for Reactive Forms.
 
 5. This component should be able to be called up as follows:
 
@@ -103,8 +112,8 @@ ng g c flight-booking/flight-validation-errors
 <div class="form-group">
   <input [...] name="from" [(ngModel)]="from" [...] required minlength="3" />
 
-  @if (flightSearchForm.controls['from']) {
-    <app-flight-validation-errors [errors]="flightSearchForm.controls['from'].errors" fieldLabel="From" />
+  @if (flightSearchForm.controls['from']?.errors) {
+  <app-flight-validation-errors [errors]="flightSearchForm.controls['from'].errors" fieldLabel="From" />
   }
 </div>
 ```
