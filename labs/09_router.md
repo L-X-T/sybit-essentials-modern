@@ -13,16 +13,16 @@ In this exercise, you will implement the following menu structure with routing:
 
 ```
    AppComponent
-      +----------- HomeComponent
+      +----------- HomeComponent (Dummy)
+      +----------- AirportComponent
       +----------- FlightSearchComponent
       +----------- PassengerSearchComponent (Dummy)
 ```
 
 The following pattern is taken into account:
 
-- The `AppComponent` and `HomeComponent` are part of the `AppModule`
-- The other two components are part of the `FlightBookingModule`
-- Each module gets assigned its own routes configuration with `forRoot` or `forChild`.
+- The `AppComponent` and `HomeComponent` are part of the `app.routes.ts`
+- The other two components are part of the `flight-booking.routes.ts` in the `flight-booking` folder.
 
 If you want, guide the following through the exercise:
 
@@ -31,64 +31,52 @@ If you want, guide the following through the exercise:
    - HomeComponent (folder `src/app/home`)
    - PassengerSearchComponent (folder `src/app/flight-booking/passenger-search`)
 
-2. Make sure that the new HomeComponent is registered with the `AppModule`.
-
-3. Make sure that the new `PassengerSearchComponent` is registered with the `FlightBookingModule`.
-
-4. Create a route configuration `app.routes.ts` for your `AppModule` in the `src/app` folder.
+2. Create a route configuration `app.routes.ts` in the `src/app` folder.
 
    <details>
    <summary>Show source</summary>
    <p>
 
    ```typescript
-   export const appRoutes: Routes = [
+   import { Route } from '@angular/router';
+
+   import { AirportsComponent } from './airports/airports.component';
+   import { HomeComponent } from './home/home.component';
+
+   import flightBookingRoutes from './flight-booking/flight-booking.routes';
+
+   export const appRoutes: Route[] = [
      {
        path: '',
        redirectTo: 'home',
        pathMatch: 'full',
      },
+
+     {
+       path: 'airports',
+       component: AirportsComponent,
+     },
      {
        path: 'home',
        component: HomeComponent,
      },
+
      {
-       path: '**',
-       redirectTo: 'home',
+       path: 'flight-booking',
+       children: flightBookingRoutes,
      },
+
+     /*{
+       path: '**',
+       redirectTo: '',
+      },*/
    ];
-   ```
-
-  </p>
-  </details>
-
-5. Open the file `app.module.ts` and import the `RouterModule` from Angular. Enter the route configuration from the `app.routes.ts` file.
-
-   <details>
-   <summary>Show source</summary>
-   <p>
-
-   ```typescript
-   @NgModule({
-     imports: [
-       BrowserModule,
-       FormsModule,
-       FlightBookingModule,
-       HttpClientModule,
-       RouterModule.forRoot(appRoutes), // <-- Add this line!
-     ],
-     declarations: [AppComponent, SidebarComponent, NavbarComponent, HomeComponent],
-     bootstrap: [AppComponent],
-   })
-   export class AppModule {}
    ```
 
    </p>
    </details>
 
-   Note that the `forRoot` method is used here because the AppModule is the root module of the application.
-
-6. In the folder `src/app/flight-booking` create a file `flight-booking.routes.ts` with a route configuration for the `FlightSearchComponent` and the `PassengerSearchComponent`.
+3. In the folder `src/app/flight-booking` create a file `flight-booking.routes.ts` with a route configuration for the `FlightSearchComponent` and the `PassengerSearchComponent`.
 
    <details>
    <summary>Show source</summary>
@@ -110,31 +98,22 @@ If you want, guide the following through the exercise:
    </p>
    </details>
 
-7. Open the file `flight-booking.module.ts` in the folder `src/app/flight-booking` and import the RouterModule. Enter the new routes configuration. Note that the **forChild** method is used here because it is a child module (feature module).
-
-    <details>
-    <summary>Show source</summary>
-    <p>
+4. Open your `app.config.ts` and add `provideRouter`:
 
    ```typescript
-   @NgModule({
-     imports: [
-       CommonModule,
-       FormsModule,
-       SharedModule,
-
-       RouterModule.forChild(flightBookingRoutes), // <-- Add this line!
+   export const appConfig: ApplicationConfig = {
+     providers: [
+       provideHttpClient(),
+       provideRouter(
+         appRoutes,
+         // withDebugTracing(),
+         // withEnabledBlockingInitialNavigation()
+       ),
      ],
-     declarations: [FlightSearchComponent, FlightCardComponent, PassengerSearchComponent, FlightEditComponent],
-     exports: [FlightSearchComponent],
-   })
-   export class FlightBookingModule {}
+   };
    ```
 
-    </p>
-    </details>
-
-8. Open the `app.component.html` file and replace the call to `app-flight-search` with a placeholder (`<router-outlet> </router-outlet>`) for the Router.
+5. Open the `app.component.html` file and replace the call to `app-flight-search` with a placeholder (`<router-outlet> </router-outlet>`) for the Router.
 
    <details>
    <summary>Show source</summary>
@@ -143,7 +122,9 @@ If you want, guide the following through the exercise:
    ```html
    <div class="content">
      <!-- <app-flight-search /> -->
+     <!-- <app-airports /> -->
      <!-- old -->
+
      <router-outlet />
      <!-- new -->
    </div>
@@ -152,7 +133,9 @@ If you want, guide the following through the exercise:
    </p>
    </details>
 
-9. Open the `sidebar.component.html` file and update the menu entries with the routerLink attribute in order to activate the individual routes.
+   Make sure to add the `RouterOutlet` import to your `app.component.ts` file.
+
+6. Open the `sidebar.component.html` file and update the menu entries with the routerLink attribute in order to activate the individual routes.
 
    <details>
    <summary>Show source</summary>
@@ -161,21 +144,28 @@ If you want, guide the following through the exercise:
    ```html
    <ul class="nav">
      <li routerLinkActive="active">
-       <a routerLink="home">
+       <a routerLink="/home">
          <i class="ti-home"></i>
          <p>Home</p>
        </a>
      </li>
 
      <li routerLinkActive="active">
-       <a routerLink="flight-search">
+       <a routerLink="/airports">
+         <i class="ti-arrow-top-right"></i>
+         <p>Airports</p>
+       </a>
+     </li>
+
+     <li routerLinkActive="active">
+       <a routerLink="/flight-booking/flight-search">
          <i class="ti-arrow-top-right"></i>
          <p>Flight Search</p>
        </a>
      </li>
 
      <li routerLinkActive="active">
-       <a routerLink="passenger-search">
+       <a routerLink="/flight-booking/passenger-search">
          <i class="ti-user"></i>
          <p>Passenger Search</p>
        </a>
@@ -188,9 +178,11 @@ If you want, guide the following through the exercise:
    </p>
    </details>
 
-10. Check with the TypeScript compiler in your IDE whether there are any compilation errors and correct them if necessary.
+7. Make sure to add all necessary imports (e.g. `routerLinkActive`, `routerLink`) to the `sidebar.component.ts`.
 
-11. Test your solution.
+8. Check with the TypeScript compiler in your IDE whether there are any compilation errors and correct them if necessary.
+
+9. Test your solution.
 
 ## Bonus: Routes with hash fragment and tracing \*
 
@@ -220,9 +212,7 @@ This should receive an Id as a url segment and a matrix parameter showDetails wh
 
 1. Use your existing or if not create a `FlightEditComponent` (as a dummy component) in the folder `src/app/flight-booking/flight-edit`.
 
-2. Open the file `flight-booking.module.ts` and make sure that the new component is registered in the `FlightBookingModule`.
-
-3. Have the ActivatedRoute injected into the `FlightEditComponent` and call up the matrix parameters `id` and `showDetails`.
+2. Have the ActivatedRoute injected into the `FlightEditComponent` and call up the matrix parameters `id` and `showDetails`.
 
    <details>
    <summary>Show source</summary>
@@ -248,7 +238,7 @@ This should receive an Id as a url segment and a matrix parameter showDetails wh
    </p>
    </details>
 
-4. Open the file `flight-edit.component.html` and output the parameters you have called up there.
+3. Open the file `flight-edit.component.html` and output the parameters you have called up there.
 
    <details>
    <summary>Show source</summary>
@@ -270,7 +260,7 @@ This should receive an Id as a url segment and a matrix parameter showDetails wh
    </p>
    </details>
 
-5. Open the file `flight-booking.routes.ts` and add a route for the new `FlightEditComponent`.
+4. Open the file `flight-booking.routes.ts` and add a route for the new `FlightEditComponent`.
 
     <details>
     <summary>Show source</summary>
@@ -291,7 +281,7 @@ This should receive an Id as a url segment and a matrix parameter showDetails wh
     </p>
     </details>
 
-6. Open the file `flight-card.component.html` and insert a link for the new route.
+5. Open the file `flight-card.component.html` and insert a link for the new route.
 
    <details>
    <summary>Show source</summary>
@@ -304,9 +294,9 @@ This should receive an Id as a url segment and a matrix parameter showDetails wh
    </p>
    </details>
 
-7. Check with the TypeScript compiler in your IDE whether there are any compilation errors and correct them if necessary.
+6. Check with the TypeScript compiler in your IDE whether there are any compilation errors and correct them if necessary.
 
-8. Test your solution: Search for flights and click on Edit for one of the flights found.
+7. Test your solution: Search for flights and click on Edit for one of the flights found.
 
 ## Bonus: Edit flights \*
 
@@ -434,21 +424,21 @@ In this exercise you create the opportunity to edit the flight presented in the 
 
    ```html
    @if (flight) {
-     <form>
-       <div class="form-group">
-         <label for="id">Id:</label>
-         <input name="id" class="form-control" [(ngModel)]="flight.id" />
-       </div>
+   <form>
+     <div class="form-group">
+       <label for="id">Id:</label>
+       <input name="id" class="form-control" [(ngModel)]="flight.id" />
+     </div>
 
-       <div class="form-group">
-         <label for="from">From:</label>
-         <input name="from" class="form-control" [(ngModel)]="flight.from" />
-       </div>
+     <div class="form-group">
+       <label for="from">From:</label>
+       <input name="from" class="form-control" [(ngModel)]="flight.from" />
+     </div>
 
-       <!-- Add more fields for the other attributes of flight -->
+     <!-- Add more fields for the other attributes of flight -->
 
-       <button type="submit" class="btn btn-default" (click)="save()">Save</button>
-     </form>
+     <button type="submit" class="btn btn-default" (click)="save()">Save</button>
+   </form>
    }
    ```
 
